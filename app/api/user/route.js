@@ -30,7 +30,7 @@ export async function POST(req) {
                     const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, referralOnboarding: findUser.referralOnboarding, referredBy: { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username } }
                     return NextResponse.json({ ok: true, user })
                 }
-                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, referralOnboarding: findUser.referralOnboarding }
+                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, referralOnboarding: findUser.referralOnboarding ,createdAt:findUser.createdAt}
                 return NextResponse.json({ ok: true, user })
             }
             return NextResponse.json({ ok: false, message: 'Invalid hash' })

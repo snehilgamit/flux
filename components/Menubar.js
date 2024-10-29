@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { LuUser } from "react-icons/lu";
-import { HiFire, HiTrophy, HiHome, HiWallet ,HiSquares2X2} from "react-icons/hi2";
+import { HiFire, HiTrophy, HiHome, HiWallet ,HiSquares2X2, HiRocketLaunch} from "react-icons/hi2";
 
 const Menubar = ({ changeTab }) => {
     const [activeTab, setActiveTab] = useState(0)
@@ -11,14 +11,23 @@ const Menubar = ({ changeTab }) => {
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===0?'rgb(0 0 0 / 0.05)':'transparent'}}>
                         <HiFire className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 0 ? '#9AF6C1' : 'white' }} size={'30px'} />
                     </div>
-                    Event
+                    Tasks
                 </div>
+                
                 <div className='flex items-center flex-col transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 1 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(1);setActiveTab(1)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===1?'rgb(0 0 0 / 0.05)':'transparent'}}>
-                        <HiWallet className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 1 ? '#9AF6C1' : 'white' }}  size={'30px'} />
+                        <HiRocketLaunch className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 1 ? '#9AF6C1' : 'white' }}  size={'30px'} />
+                    </div>
+                    Early
+                </div>
+
+                <div className='flex items-center flex-col transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 2 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(2);setActiveTab(2)}}>
+                    <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ==2?'rgb(0 0 0 / 0.05)':'transparent'}}>
+                        <HiWallet className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 2 ? '#9AF6C1' : 'white' }} size={'30px'} />
                     </div>
                     Wallet
                 </div>
+
             </div>
         </div>
     )
