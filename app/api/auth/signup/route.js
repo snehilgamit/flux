@@ -29,7 +29,7 @@ export async function POST(req) {
                 }
                 findFriend ?newUser.referralOnboarding = 1 : null
                 findFriend ? null : newUser.enteredReferralCode = ''
-                const createUser = await User.updateOne(newUser)
+                const createUser = await User.create(newUser)
                 if (createUser) {
                     return NextResponse.json({ ok: true, message: 'Done' })
                 }

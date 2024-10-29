@@ -1,0 +1,16 @@
+import React from 'react'
+
+const WaitList = () => {
+  return (
+    <div className='min-h-screen flex w-full justify-center'>
+        <div className='text-white text-center mt-8 px-8'>
+            <h1 className='text-2xl font-bold'>Your journey to the top starts here.</h1>
+            <p className='text-sm font-normal px-4 mt-2'>Compete, conquer, and claim your spot
+            among the best.</p>
+        </div>
+
+    </div>
+  )
+}
+
+export default WaitList
