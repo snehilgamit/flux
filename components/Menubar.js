@@ -6,16 +6,16 @@ const Menubar = ({ changeTab }) => {
     const [activeTab, setActiveTab] = useState(0)
     return (
         <div className='w-full absolute bottom-0 uppercase text-[0.55rem] shadow-xl bg-[#7d7d7d1f]'>
-            <div className='flex  items-center justify-center gap-20 border-[#2c3235] border-t-2 py-6 pt-4 px-3 pl-5 max-[320px]:px-2 font-semibold border-b-0 border-x-0'>
+            <div className='flex  items-center justify-center gap-20 border-[#2c3235] border-t-2 py-7 pt-1 px-3 pl-5 max-[320px]:px-2 font-semibold border-b-0 border-x-0'>
                 <div className='flex items-center flex-col transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 0 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(0);setActiveTab(0)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===0?'rgb(0 0 0 / 0.05)':'transparent'}}>
-                        <HiFire className='transition-all duration-500 ease-in-out' style={{ fill: activeTab == 0 ? '#9AF6C1' : 'white' }} size={'25px'} />
+                        <HiFire className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 0 ? '#9AF6C1' : 'white' }} size={'30px'} />
                     </div>
                     Event
                 </div>
                 <div className='flex items-center flex-col transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 1 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(1);setActiveTab(1)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===1?'rgb(0 0 0 / 0.05)':'transparent'}}>
-                        <HiWallet className='transition-all duration-500 ease-in-out' style={{ fill: activeTab == 1 ? '#9AF6C1' : 'white' }}  size={'25px'} />
+                        <HiWallet className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 1 ? '#9AF6C1' : 'white' }}  size={'30px'} />
                     </div>
                     Wallet
                 </div>
