@@ -14,11 +14,11 @@ const index = () => {
     const initData = WebApp.initData
     const { data } = await axios.post('/api/auth/session', { data: initData })
     const { ok, message } = data
-    // if (ok) {
-    //   router.push('/home')
-    // } else {
-    //   router.push('/signup')
-    // }
+    if (ok) {
+      router.push('/home')
+    } else {
+      router.push('/signup')
+    }
   }
   useEffect(() => {
     checkSession()
