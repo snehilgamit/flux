@@ -106,7 +106,7 @@ const Signup = () => {
     }
     const changeBg = async () => {
         const WebApp = (await import('@twa-dev/sdk')).default
-        WebApp.backgroundColor = '#f8ff00'
+        WebApp.backgroundColor = '#9AF6C1'
     }
     useEffect(() => {
         if (window) {
