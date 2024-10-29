@@ -28,7 +28,7 @@ const index = () => {
     <div className='mb-20'>
       <h1 className='uppercase text-5xl mb-16 font-extrabold text-[#9AF6C1]'>Flux</h1>
       <FlamingCircleLoader/>
-      import { GiVibratingBall } from "react-icons/gi";
+      {/* import { GiVibratingBall } from "react-icons/gi"; */}
     </div>
     </div>
   )
