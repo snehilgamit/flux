@@ -84,12 +84,12 @@ const Wallet = ({ user }) => {
                     <div className='-translate-y-5 translate-x-1'>
                         <div>
                             <h1 className='text-white font-bold text-2xl'>{user?.first_name}</h1>
-                            <h1 className='text-white/70 font-medium text-sm'>{months[new Date(user?.createdAt).getMonth()]} {new Date(user?.createdAt).getFullYear()}</h1>
+                            <h1 className='text-white/70 font-medium text-sm'>Joined {months[new Date(user?.createdAt).getMonth()]} {new Date(user?.createdAt).getFullYear()}</h1>
                         </div>
                     </div>
                 </div>
                 <div className='w-full px-6 '>
-                    <div className='font-semibold overflow-scroll no-scrollbar border-b border-[#2c3235] pb-4' >
+                    <div className='font-semibold overflow-scroll no-scrollbar border-b-2 border-[#2c3235] pb-6' >
                         <div className='flex gap-2 text-sm mr-2'>
                             {catagory.map((element, index) => (
                                 <div key={index} className='p-2 px-4 rounded-3xl' onClick={() => { changeFilter('_catagory', element.id) }} style={{ backgroundColor: filter._catagory === element.id ? '#9AF6C1' : 'rgb(255 255 255 / 0.2)', color: filter._catagory === element.id ? 'black' : 'white' }}>
@@ -99,6 +99,11 @@ const Wallet = ({ user }) => {
                         </div>
                     </div>
                 </div>
+                <div className='w-full px-6 h-[20vh] flex justify-center items-center'>
+                <p className='text-white text-xl font-semibold'>
+                    No items to display
+                </p>
+                </div>
             </div>
             <ExtandDetails visible={visible.refer} close={closeExtandDetails} name={'refer'}>
                 <div className=''>
@@ -107,7 +112,7 @@ const Wallet = ({ user }) => {
                             Invite your frens
                         </h1>
                         <div className='flex gap-2 w-fit px-4 py-1.5 justify-center items-center bg-[#9AF6C1] rounded-3xl mt-3'>
-                            <p className='text-sm font-medium'>Invite</p>
+                            <p className='text-sm font-semibold'>Invite</p>
                             <HiMiniShare />
                         </div>
                     </div>
@@ -118,13 +123,13 @@ const Wallet = ({ user }) => {
                     <div className='px-4'>
                         <div className=''>
                             <h1 className='font-semibold text-xl'>More</h1>
-                            <div className='flex gap-3 font-medium items-center py-2 mt-1.5'>
+                            <div className='flex gap-5 font-medium items-center py-1 mt-1.5'>
                                 <div>
                                     <HiMiniCog6Tooth size={25} />
                                 </div>
                                 <p>Settings</p>
                             </div>
-                            <div className='flex gap-3 font-medium items-center py-2'>
+                            <div className='flex gap-5 font-medium items-center py-1'>
                                 <div>
                                     <HiShieldExclamation size={25} />
                                 </div>
