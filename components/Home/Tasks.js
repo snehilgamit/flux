@@ -5,10 +5,13 @@ import { WalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-r
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
+import nacl from 'tweetnacl'
+import bs58 from "bs58";
 const Tasks = ({ user }) => {
   const { publicKey, connected, signMessage,disconnect,disconnecting } = useWallet()
   const [User, setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
+  const [data,setData] = useState('')
   const [time, setTime] = useState(null)
   const setTimer = () => {
     const times = user.events.map(el => {
@@ -66,11 +69,20 @@ const Tasks = ({ user }) => {
       console.error("Error signing message:", err);
     }
   }
+  useEffect(()=>{
+    const keypair = nacl.box.keyPair()
+    const c = window.localStorage.getItem('hello')
+    if(c){
+      setData(c)
+    }else{
+      window.localStorage.setItem('hello',bs58.encode(keypair.secretKey))
+    }
+  },[])
   return (
     <div>
       <Toaster />
       <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
-        <p>Tasks</p>
+        <p>{data}</p>
         <WalletMultiButton style={{
           backgroundColor: 'black',
           color: '#9AF6C1',
