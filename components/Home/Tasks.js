@@ -1,10 +1,13 @@
 'use client'
 import { error, success } from '@/utils/toast'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 const Tasks = ({ user }) => {
-  const [User,setUser] = useState(user)
+  const { publicKey, connected, signMessage,disconnect,disconnecting } = useWallet()
+  const [User, setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
   const [time, setTime] = useState(null)
   const setTimer = () => {
@@ -35,25 +38,47 @@ const Tasks = ({ user }) => {
   }, [time])
 
   const claim = async (link) => {
+    if (!connected && !publicKey) {
+      return error('Connect wallet.')
+    }
+    const message = `Sign this message to verify this wallet is belong to you.\nPublic Key : ${publicKey}\n`
+    const messageBytes = new TextEncoder().encode(message)
     const toastID = toast.loading('Minting')
-    const WebApp = (await import('@twa-dev/sdk')).default
-    WebApp.ready()
-    const initData = WebApp.initData
-    const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
-    toast.dismiss(toastID)
-    if (data.ok) {
-      success(data.message)
-      setUser(prev=>({...prev,early_bird:true}))
-    } else {
-      error(data.message)
+    try {
+      const signedMessage = await signMessage?.(messageBytes)
+      const signedMessageBase64 = Buffer.from(signedMessage).toString("base64");
+      const WebApp = (await import('@twa-dev/sdk')).default
+      WebApp.ready()
+      const initData = WebApp.initData
+      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { signed_message: signedMessageBase64, public_key: publicKey.toBase58(), message } })
+      
+      toast.dismiss(toastID)
+      if (data.ok) {
+        success(data.message)
+        setUser(prev => ({ ...prev, early_bird: true }))
+      } else {
+        error(data.message)
+      }
+    } catch (err) {
+      disconnect()
+      toast.dismiss(toastID)
+      // error('Error while minting. try again.')
+      console.error("Error signing message:", err);
     }
   }
   return (
     <div>
       <Toaster />
-      <div className='text-white px-4 py-2 font-bold text-2xl pb-0'>
-        Tasks
+      <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
+        <p>Tasks</p>
+        <WalletMultiButton style={{
+          backgroundColor: 'black',
+          color: '#9AF6C1',
+          borderRadius: '20px',
+          fontSize: '15px'
+        }} >{!connected && 'Connect wallet'}</WalletMultiButton>
       </div>
+
       <div className='px-4'>
         {tasks.map((element, index) => (
           <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#2c3235]/30 text-white border border-[#2c3235] relative my-2'>
@@ -79,12 +104,15 @@ const Tasks = ({ user }) => {
               You Fluxed
             </div>
               :
-              <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-105 transition-all duration-500  ease-in-out cursor-pointer' style={{
-                backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
-                color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
-              }} onClick={() => claim(element.api)}>
-                {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
-              </div>
+              <>
+                <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-105 transition-all duration-500  ease-in-out cursor-pointer' style={{
+                  backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
+                  color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
+                }} onClick={() => claim(element.api)}>
+                  {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
+                </div>
+
+              </>
             }
           </div>
         ))}
