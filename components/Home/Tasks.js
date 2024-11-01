@@ -4,6 +4,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 const Tasks = ({ user }) => {
+  const [User,setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
   const [time, setTime] = useState(null)
   const setTimer = () => {
@@ -34,12 +35,15 @@ const Tasks = ({ user }) => {
   }, [time])
 
   const claim = async (link) => {
+    const toastID = toast.loading('Minting')
     const WebApp = (await import('@twa-dev/sdk')).default
     WebApp.ready()
     const initData = WebApp.initData
     const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
+    toast.dismiss(toastID)
     if (data.ok) {
       success(data.message)
+      setUser(prev=>({...prev,early_bird:true}))
     } else {
       error(data.message)
     }
@@ -68,12 +72,20 @@ const Tasks = ({ user }) => {
             </div>
             <div className='text-xs font-semibold mt-10 mb-0.5'>
               {time && time[index].toString}</div>
-            <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-110 transition-all duration-500  ease-in-out cursor-pointer' style={{
+            {User.early_bird ? <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-105 transition-all duration-500  ease-in-out cursor-pointer' style={{
               backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
               color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
-            }} onClick={() => claim(element.api)}>
-              {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
+            }}>
+              You Fluxed
             </div>
+              :
+              <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-105 transition-all duration-500  ease-in-out cursor-pointer' style={{
+                backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
+                color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
+              }} onClick={() => claim(element.api)}>
+                {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
+              </div>
+            }
           </div>
         ))}
       </div>

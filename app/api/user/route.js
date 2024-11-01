@@ -27,7 +27,7 @@ export async function POST(req) {
                 }
                 const events = await Event.find({ isActive: true });
                 const referredBy = await User.findOne({ referralCode: findUser.enteredReferralCode })
-                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events }
+                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events ,early_bird:findUser.early_bird}
                 if (referredBy) {
                     user.referredBy = { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username }
                 }

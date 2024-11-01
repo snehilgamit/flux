@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import "animate.css"
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import FlamingCircleLoader from '@/components/FlamingCircleLoader'
 import { FcOk,FcBullish,FcVip,FcRating,FcConferenceCall} from "react-icons/fc";
 import { error, success } from '@/utils/toast'
@@ -82,15 +82,7 @@ const Signup = () => {
             }
         }
     }
-    const changeBg = async () => {
-        const WebApp = (await import('@twa-dev/sdk')).default
-        WebApp.backgroundColor = '#9AF6C1'
-    }
-    useEffect(() => {
-        if (window) {
-            changeBg()
-        }
-    }, [])
+
     return (
         <>
             <Toaster />

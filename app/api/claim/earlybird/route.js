@@ -26,7 +26,7 @@ export async function POST(req) {
         return NextResponse.json({ ok: false, message: "Mint is closed." })
     }
     if (earlyBirdEvent.left <= 0) {
-        return NextResponse.json({ ok: false, message: 'All spot are claimed.' })
+        return NextResponse.json({ ok: false, message: 'All spots are claimed.' })
     }
     const mint = await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: -1 } })
     if (!mint.modifiedCount) {
@@ -37,5 +37,5 @@ export async function POST(req) {
         await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: 1 } })
         return NextResponse.json({ ok: false, message: 'Error while claming.' })
     }
-    return NextResponse.json({ ok: true, message: 'claimed' })
+    return NextResponse.json({ ok: true, message: 'Claimed.' })
 }

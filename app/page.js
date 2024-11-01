@@ -23,6 +23,17 @@ const index = () => {
   useEffect(() => {
     checkSession()
   }, [])
+
+  const changeBg = async () => {
+    const WebApp = (await import('@twa-dev/sdk')).default
+    WebApp.headerColor = '#9AF6C1'
+    WebApp.backgroundColor = '#191919'
+}
+useEffect(() => {
+    if (window) {
+        changeBg()
+    }
+}, [])
   return (
     <div className='flex justify-center items-center min-h-screen flex-col w-full bg-[#191919] relative overflow-hidden animate__animated animate__fadeIn'>
       <div className='mb-20'>
