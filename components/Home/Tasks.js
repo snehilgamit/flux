@@ -69,13 +69,14 @@ const Tasks = ({ user }) => {
     }
   }
   const connectWallet = async () => {
+    const WebApp = (await import('@twa-dev/sdk')).default
     const newKeyPair = nacl.box.keyPair()
     setkeyPair(newKeyPair)
     const public_key = bs58.encode(newKeyPair.publicKey)
     const secret_key = bs58.encode(newKeyPair.secretKey)
     window.localStorage.setItem('phantom_link', JSON.stringify({ public_key, secret_key }))
     const redirect_link = 'https://t.me/punksceo_bot/join?startapp='
-    router.push(`https://phantom.app/ul/v1/connect?app_url=https://flux-green-theta.vercel.app&dapp_encryption_public_key=${public_key}&redirect_link=${redirect_link}`)
+    WebApp.openLink(`https://phantom.app/ul/v1/connect?app_url=https://flux-green-theta.vercel.app&dapp_encryption_public_key=${public_key}&redirect_link=${redirect_link}`)
   }
 
   useEffect(() => {
