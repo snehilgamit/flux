@@ -21,8 +21,16 @@ const UserSchema = new Schema({
     enteredReferralCode: {
         type: String
     },
-    referralOnboarding: {
-        type: Number
+    wallet:{
+        type: Object,
+        default:{
+            public_key:'',
+            status:false
+        }
+    },
+    early_bird:{
+        type:Boolean,
+        default:false
     }
 }, {
     timestamps: true,

@@ -21,7 +21,7 @@ const Wallet = ({ user }) => {
     const [editButton, setEditButton] = useState({ profile: false, banner: false })
     const [visible, setVisible] = useState({ refer: false, option: false })
     const [filter, setFilter] = useState({ _catagory: 'collected' })
-
+    
     const changeFilter = (type, value) => {
         if (type === '_catagory') {
             setFilter(prev => {
@@ -151,7 +151,7 @@ const ExtandDetails = ({ children, visible, close, name }) => {
     return (
         <div className='w-full backdrop-blur-sm min-h-screen absolute  top-0 left-0 flex justify-center items-center' style={{ display: visible ? '' : 'none' }}>
             <div className='bg-white p-4 py-8 w-[70%] rounded-xl mb-20 flex itmes-center justify-center relative'>
-                <div className=' absolute top-1 right-1.5' onClick={() => close(name)}>
+                <div className=' absolute top-1.5 right-2' onClick={() => close(name)}>
                     <HiXMark size={23} />
                 </div>
                 {children}

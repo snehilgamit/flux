@@ -1,3 +1,4 @@
+import Event from "@/models/Event";
 import User from "@/models/User";
 import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { isHashValid } from "@/utils/telegramAuth";
@@ -7,8 +8,8 @@ export async function POST(req) {
         await ConnectMongoDB()
         const body = await req.json()
         const { data } = body
-        if(!data){
-            return NextResponse.json({ok:false,message:"UnAuthorize request"});
+        if (!data) {
+            return NextResponse.json({ ok: false, message: "UnAuthorize request" });
         }
         const userData = Object.fromEntries(new URLSearchParams(data))
         const { id } = JSON.parse(userData.user)
@@ -24,13 +25,12 @@ export async function POST(req) {
                 if (findUser.referralOnboarding == 1) {
                     await User.updateOne({ user_id: id }, { $set: { referralOnboarding: 0 } })
                 }
+                const events = await Event.find({ isActive: true });
                 const referredBy = await User.findOne({ referralCode: findUser.enteredReferralCode })
-
+                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events }
                 if (referredBy) {
-                    const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, referralOnboarding: findUser.referralOnboarding, referredBy: { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username } }
-                    return NextResponse.json({ ok: true, user })
+                    user.referredBy = { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username }
                 }
-                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, referralOnboarding: findUser.referralOnboarding ,createdAt:findUser.createdAt}
                 return NextResponse.json({ ok: true, user })
             }
             return NextResponse.json({ ok: false, message: 'Invalid hash' })

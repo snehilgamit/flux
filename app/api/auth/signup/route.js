@@ -27,7 +27,6 @@ export async function POST(req) {
                     referralCode,
                     enteredReferralCode
                 }
-                findFriend ?newUser.referralOnboarding = 1 : null
                 findFriend ? null : newUser.enteredReferralCode = ''
                 const createUser = await User.create(newUser)
                 if (createUser) {
