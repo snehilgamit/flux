@@ -75,7 +75,7 @@ const Tasks = ({ user }) => {
     const public_key = bs58.encode(newKeyPair.publicKey)
     const secret_key = bs58.encode(newKeyPair.secretKey)
     window.localStorage.setItem('phantom_link', JSON.stringify({ public_key, secret_key }))
-    const redirect_link = 'tg://resolve'
+    const redirect_link = 'https://t.me/punksceo_bot/join'
     WebApp.openLink(`https://phantom.app/ul/v1/connect?app_url=https://flux-green-theta.vercel.app&dapp_encryption_public_key=${public_key}&redirect_link=${redirect_link}`)
   }
 
