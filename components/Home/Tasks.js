@@ -33,10 +33,10 @@ const Tasks = ({user}) => {
   }, [time])
   return (
     <div>
-      <div className='text-white px-2 py-2 font-bold text-2xl pb-0'>
+      <div className='text-white px-4 py-2 font-bold text-2xl pb-0'>
         Tasks
       </div>
-      <div className='px-2'>
+      <div className='px-4'>
         {tasks.map((element, index) => (
           <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#2c3235]/30 text-white border border-[#2c3235] relative my-2'>
             <div className='flex justify-between'>
