@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast'
 import FlamingCircleLoader from '@/components/FlamingCircleLoader'
 import { FcOk,FcBullish,FcVip,FcRating,FcConferenceCall} from "react-icons/fc";
+import { error, success } from '@/utils/toast'
 
 const colorPlate = { bg: '#191919', text: '#9AF6C1', border: '#2c3235' }
 const Signup = () => {
@@ -72,33 +73,10 @@ const Signup = () => {
         const { data } = await axios.post('/api/auth/signup', { data: initData? initData:'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
         const { ok, message } = data
         if (ok) {
-            toast('Done!',
-                {
-                    duration: 1000,
-                    icon: '👏',
-                    style: {
-                        paddingRight: '10px',
-                        paddingLeft: '10px',
-                        borderRadius: '10px',
-                        background: '#333',
-                        color: '#fff',
-                    },
-                }
-            );
+            success('Fluxed!')
             router.push('/home')
         } else {
-            toast.error(message,
-                {
-                    duration: 1000,
-                    style: {
-                        paddingRight: '10px',
-                        paddingLeft: '10px',
-                        borderRadius: '10px',
-                        background: '#333',
-                        color: '#fff',
-                    },
-                }
-            );
+            error(message)
             if (message === 'Account exist') {
                 router.push('/home')
             }
