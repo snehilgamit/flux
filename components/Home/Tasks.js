@@ -1,18 +1,20 @@
 'use client'
 import { error, success } from '@/utils/toast'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { WalletConnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import nacl from 'tweetnacl'
 import bs58 from "bs58";
+import { useRouter } from 'next/navigation'
 const Tasks = ({ user }) => {
-  const { publicKey, connected, signMessage,disconnect,disconnecting } = useWallet()
+  const router = useRouter()
+  const [connected, setConnected] = useState(false);
   const [User, setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
-  const [data,setData] = useState('')
+  const [data, setData] = useState('')
   const [time, setTime] = useState(null)
+  const [keyPair, setkeyPair] = useState()
+  const loading = useRef(true)
   const setTimer = () => {
     const times = user.events.map(el => {
       const timeLeft = (Date.now() > el.start ? el.end : el.start) - Date.now()
@@ -41,9 +43,6 @@ const Tasks = ({ user }) => {
   }, [time])
 
   const claim = async (link) => {
-    if (!connected && !publicKey) {
-      return error('Connect wallet.')
-    }
     const message = `Sign this message to verify this wallet is belong to you.\nPublic Key : ${publicKey}\n`
     const messageBytes = new TextEncoder().encode(message)
     const toastID = toast.loading('Minting')
@@ -54,7 +53,7 @@ const Tasks = ({ user }) => {
       WebApp.ready()
       const initData = WebApp.initData
       const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { signed_message: signedMessageBase64, public_key: publicKey.toBase58(), message } })
-      
+
       toast.dismiss(toastID)
       if (data.ok) {
         success(data.message)
@@ -69,26 +68,38 @@ const Tasks = ({ user }) => {
       console.error("Error signing message:", err);
     }
   }
-  useEffect(()=>{
-    const keypair = nacl.box.keyPair()
-    const c = window.localStorage.getItem('hello')
-    if(c){
-      setData(c)
-    }else{
-      window.localStorage.setItem('hello',bs58.encode(keypair.secretKey))
+  const connectWallet = async () => {
+    const newKeyPair = nacl.box.keyPair()
+    setkeyPair(newKeyPair)
+    const public_key = bs58.encode(newKeyPair.publicKey)
+    const secret_key = bs58.encode(newKeyPair.secretKey)
+    window.localStorage.setItem('phantom_link', JSON.stringify({ public_key, secret_key }))
+    const redirect_link = 'https://t.me/punksceo_bot/join?startapp='
+    router.push(`https://phantom.app/ul/v1/connect?app_url=https://flux-green-theta.vercel.app&dapp_encryption_public_key=${public_key}&redirect_link=${redirect_link}`)
+  }
+
+  useEffect(() => {
+    const handleResponse = async () => {
+      loading.current = false
+      const WebApp = (await import('@twa-dev/sdk')).default
+      const data = WebApp.initData
+      console.log(data)
     }
-  },[])
+    if(loading.current){
+      handleResponse()
+    }
+  }, [])
   return (
     <div>
       <Toaster />
       <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
-        <p>{data}</p>
-        <WalletMultiButton style={{
+        <p>Task</p>
+        <div className='px-3 py-1.5 cursor-pointer' onClick={connectWallet} style={{
           backgroundColor: 'black',
           color: '#9AF6C1',
           borderRadius: '20px',
           fontSize: '15px'
-        }} >{!connected && 'Connect wallet'}</WalletMultiButton>
+        }} >{!connected && 'Connect wallet'}</div>
       </div>
 
       <div className='px-4'>
@@ -123,7 +134,6 @@ const Tasks = ({ user }) => {
                 }} onClick={() => claim(element.api)}>
                   {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
                 </div>
-
               </>
             }
           </div>

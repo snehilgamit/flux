@@ -1,6 +1,5 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import AppWalletProvider from "@/components/solana/AppWalletProvider";
 
 const SatoshiVariable = localFont({
   src: "./fonts/Satoshi-Variable.woff2",
@@ -8,7 +7,9 @@ const SatoshiVariable = localFont({
   weight: "100 900",
 });
 
-
+export const metadata = {
+  title:'Flux market'
+}
 export default function RootLayout({ children }) {
   return (
 
@@ -16,9 +17,7 @@ export default function RootLayout({ children }) {
       <body
         className={`${SatoshiVariable.variable} antialiased`}
       >
-        <AppWalletProvider>
           {children}
-        </AppWalletProvider>
       </body>
     </html>
   );
