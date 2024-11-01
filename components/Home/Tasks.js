@@ -85,9 +85,9 @@ const Tasks = ({ user }) => {
       const WebApp = (await import('@twa-dev/sdk')).default
       const data = WebApp.initData
       const userData = Object.fromEntries(new URLSearchParams(data));
-      await axios.post('/api/auth/session',{data})
+      await axios.post('/api/auth/store', { data })
     }
-    if(loading.current){
+    if (loading.current) {
       handleResponse()
     }
   }, [])

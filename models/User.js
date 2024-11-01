@@ -31,6 +31,10 @@ const UserSchema = new Schema({
     early_bird:{
         type:Boolean,
         default:false
+    },
+    session:{
+        type:Array,
+        default:[]
     }
 }, {
     timestamps: true,
