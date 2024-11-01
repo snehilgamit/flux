@@ -35,6 +35,10 @@ const EventSchema = new Schema({
         type:Number,
         required:true
     },
+    api:{
+        type:String,
+        required:true
+    },
     start:{
         type:Number,
         required:true

@@ -1,6 +1,8 @@
 'use client'
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-const Tasks = ({user}) => {
+import toast, { Toaster } from 'react-hot-toast'
+const Tasks = ({ user }) => {
   const [tasks, setTasks] = useState(user.events)
   const [time, setTime] = useState(null)
   const setTimer = () => {
@@ -26,13 +28,43 @@ const Tasks = ({user}) => {
     setTimer()
   }, [user])
   useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer()
-    }, 1000)
+    const interval = setInterval(setTimer, 1000)
     return () => clearInterval(interval)
   }, [time])
+
+  const claim = async (link) => {
+    const WebApp = (await import('@twa-dev/sdk')).default
+    WebApp.ready()
+    const initData = WebApp.initData
+    const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
+    if (data.ok) {
+      toast.success(data.message, {
+        duration: 1000,
+        icon: '👏',
+        style: {
+          paddingRight: '10px',
+          paddingLeft: '10px',
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+      })
+    } else {
+      toast.error(data.message, {
+        duration: 1000,
+        style: {
+            paddingRight: '10px',
+            paddingLeft: '10px',
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+        },
+    })
+    }
+  }
   return (
     <div>
+      <Toaster />
       <div className='text-white px-4 py-2 font-bold text-2xl pb-0'>
         Tasks
       </div>
@@ -54,10 +86,10 @@ const Tasks = ({user}) => {
             </div>
             <div className='text-xs font-semibold mt-10 mb-0.5'>
               {time && time[index].toString}</div>
-            <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute focus:scale-110 transition-all duration-500  ease-in-out cursor-pointer' style={{
+            <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-110 transition-all duration-500  ease-in-out cursor-pointer' style={{
               backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
               color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
-            }}>
+            }} onClick={() => claim(element.api)}>
               {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
             </div>
           </div>
