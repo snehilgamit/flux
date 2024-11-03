@@ -3,8 +3,6 @@ import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { NextResponse } from "next/server";
 import { session } from "../../auth/session/route";
 import User from "@/models/User";
-import { PublicKey } from "@solana/web3.js";
-import nacl from "tweetnacl";
 
 
 export async function POST(req) {
@@ -12,7 +10,7 @@ export async function POST(req) {
     await ConnectMongoDB()
     const { public_key } = payload
     if (!public_key) {
-        return NextResponse.json({ ok: false, message: 'Error refresh and try again.' })
+        return NextResponse.json({ ok: false, message: 'Error, refresh and try again.' })
     }
 
     const { ok, user, message } = await session(data)
@@ -28,7 +26,7 @@ export async function POST(req) {
     }
     const current_timestamp = Date.now()
     if (current_timestamp < earlyBirdEvent.start) {
-        return NextResponse.json({ ok: false, meessage: "Mint isn't started yet." })
+        return NextResponse.json({ ok: false, message: "Mint isn't started yet." })
     }
     if (current_timestamp > earlyBirdEvent.end) {
         return NextResponse.json({ ok: false, message: "Mint is closed." })

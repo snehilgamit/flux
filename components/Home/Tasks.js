@@ -45,7 +45,7 @@ const Tasks = ({ user }) => {
     return () => clearInterval(interval)
   }, [time])
 
-  const claim = async (link) => {
+  const claim_early = async (link) => {
     if(!walletAddress){
       return error("Wallet is not connected.")
     }
@@ -68,14 +68,6 @@ const Tasks = ({ user }) => {
       toast.dismiss(toastID)
       // error('Error while minting. try again.')
       console.error("Error signing message:", err);
-    }
-  }
-  const connectWallet = async () => {
-    try{
-        tonConnectUI.openModal()
-    }
-    catch(e){
-      error(e)
     }
   }
 
@@ -122,7 +114,7 @@ const Tasks = ({ user }) => {
                 <div className='px-5 rounded-xl py-1.5 w-fit  mt-2 bottom-2 right-2 font-bold absolute hover:scale-105 transition-all duration-500  ease-in-out cursor-pointer' style={{
                   backgroundColor: time && time[index].toString === 'Ended' ? 'rgba(0 0 0 /50%)' : 'black',
                   color: time && time[index].toString === 'Ended' ? 'rgba(154 246 193 /80%)' : '#9AF6C1'
-                }} onClick={() => claim(element.api)}>
+                }} onClick={() => claim_early(element.api)}>
                   {time && time[index].toString === 'Ended' ? 'Ended' : 'Mint'}
                 </div>
               </>
