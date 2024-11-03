@@ -6,9 +6,11 @@ import toast, { Toaster } from 'react-hot-toast'
 import nacl from 'tweetnacl'
 import bs58 from "bs58";
 import { useRouter } from 'next/navigation'
-import { TonConnectButton } from '@tonconnect/ui-react'
+import { TonConnectButton, TonConnectUI, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 const Tasks = ({ user }) => {
   const router = useRouter()
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const walletAddress = useTonAddress()
   const [connected, setConnected] = useState(false);
   const [User, setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
@@ -44,16 +46,15 @@ const Tasks = ({ user }) => {
   }, [time])
 
   const claim = async (link) => {
-    const message = `Sign this message to verify this wallet is belong to you.\nPublic Key : ${publicKey}\n`
-    const messageBytes = new TextEncoder().encode(message)
+    if(!walletAddress){
+      return error("Wallet is not connected.")
+    }
     const toastID = toast.loading('Minting')
     try {
-      const signedMessage = await signMessage?.(messageBytes)
-      const signedMessageBase64 = Buffer.from(signedMessage).toString("base64");
       const WebApp = (await import('@twa-dev/sdk')).default
       WebApp.ready()
       const initData = WebApp.initData
-      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { signed_message: signedMessageBase64, public_key: publicKey.toBase58(), message } })
+      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: {   public_key: walletAddress } })
 
       toast.dismiss(toastID)
       if (data.ok) {
@@ -70,33 +71,19 @@ const Tasks = ({ user }) => {
     }
   }
   const connectWallet = async () => {
-    const WebApp = (await import('@twa-dev/sdk')).default
-    const newKeyPair = nacl.box.keyPair()
-    setkeyPair(newKeyPair)
-    const public_key = bs58.encode(newKeyPair.publicKey)
-    const secret_key = bs58.encode(newKeyPair.secretKey)
-    window.localStorage.setItem('phantom_link', JSON.stringify({ public_key, secret_key }))
-    const redirect_link = 'https://t.me/punksceo_bot/join'
-    WebApp.openLink(`https://phantom.app/ul/v1/connect?app_url=https://flux-green-theta.vercel.app&dapp_encryption_public_key=${public_key}&redirect_link=${redirect_link}`)
+    try{
+        tonConnectUI.openModal()
+    }
+    catch(e){
+      error(e)
+    }
   }
 
-  useEffect(() => {
-    const handleResponse = async () => {
-      loading.current = false
-      const WebApp = (await import('@twa-dev/sdk')).default
-      const data = WebApp.initData
-      const userData = Object.fromEntries(new URLSearchParams(data));
-      await axios.post('/api/auth/store', { data })
-    }
-    if (loading.current) {
-      handleResponse()
-    }
-  }, [])
   return (
     <div>
       <Toaster />
       <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
-        <p>Task</p>
+        <p>Tasks</p>
         {/* <div className='px-3 py-1.5 cursor-pointer' onClick={connectWallet} style={{
           backgroundColor: 'black',
           color: '#9AF6C1',
