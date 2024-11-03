@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import AppWallerProvider from "@/components/ton/AppWallerProvider";
 
 const SatoshiVariable = localFont({
   src: "./fonts/Satoshi-Variable.woff2",
@@ -12,12 +13,13 @@ export const metadata = {
 }
 export default function RootLayout({ children }) {
   return (
-
     <html lang="en">
       <body
         className={`${SatoshiVariable.variable} antialiased`}
       >
+      <AppWallerProvider>
           {children}
+      </AppWallerProvider>
       </body>
     </html>
   );

@@ -6,6 +6,7 @@ import toast, { Toaster } from 'react-hot-toast'
 import nacl from 'tweetnacl'
 import bs58 from "bs58";
 import { useRouter } from 'next/navigation'
+import { TonConnectButton } from '@tonconnect/ui-react'
 const Tasks = ({ user }) => {
   const router = useRouter()
   const [connected, setConnected] = useState(false);
@@ -96,12 +97,13 @@ const Tasks = ({ user }) => {
       <Toaster />
       <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
         <p>Task</p>
-        <div className='px-3 py-1.5 cursor-pointer' onClick={connectWallet} style={{
+        {/* <div className='px-3 py-1.5 cursor-pointer' onClick={connectWallet} style={{
           backgroundColor: 'black',
           color: '#9AF6C1',
           borderRadius: '20px',
           fontSize: '15px'
-        }} >{!connected && 'Connect wallet'}</div>
+        }} >{!connected && 'Connect wallet'}</div> */}
+        <TonConnectButton></TonConnectButton>
       </div>
 
       <div className='px-4'>
