@@ -51,8 +51,7 @@ const Tasks = ({ user }) => {
           address:receiving_address,
           amount: "8000000", // Toncoin in nanotons
         },
-      ],
-      network: -3
+      ]
     };
       const tx = await tonConnectUI.sendTransaction(transaction)
       if(window.localStorage.txs){
