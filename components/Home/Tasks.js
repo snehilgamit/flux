@@ -3,21 +3,14 @@ import { error, success } from '@/utils/toast'
 import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
-import nacl from 'tweetnacl'
-import bs58 from "bs58";
-import { useRouter } from 'next/navigation'
-import { TonConnectButton, TonConnectUI, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
+const receiving_address = 'UQC1RcKcSZjUfPb5zQKfYzUJ3Q_HRe1c9EEUsDxjCvCpuAlr'
 const Tasks = ({ user }) => {
-  const router = useRouter()
   const [tonConnectUI, setOptions] = useTonConnectUI();
   const walletAddress = useTonAddress()
-  const [connected, setConnected] = useState(false);
   const [User, setUser] = useState(user)
   const [tasks, setTasks] = useState(user.events)
-  const [data, setData] = useState('')
   const [time, setTime] = useState(null)
-  const [keyPair, setkeyPair] = useState()
-  const loading = useRef(true)
   const setTimer = () => {
     const times = user.events.map(el => {
       const timeLeft = (Date.now() > el.start ? el.end : el.start) - Date.now()
@@ -46,15 +39,31 @@ const Tasks = ({ user }) => {
   }, [time])
 
   const claim_early = async (link) => {
-    if(!walletAddress){
+    if (!walletAddress) {
       return error("Wallet is not connected.")
     }
     const toastID = toast.loading('Minting')
     try {
+      const transaction = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address:receiving_address,
+          amount: "8000000", // Toncoin in nanotons
+        },
+      ],
+      network: -3
+    };
+      const tx = await tonConnectUI.sendTransaction(transaction)
+      if(window.localStorage.txs){
+        window.localStorage.txs = JSON.stringify(JSON.parse(window.localStorage.txs) + [tx.boc])
+      }else{
+        window.localStorage.txs = JSON.stringify([tx])
+      }
       const WebApp = (await import('@twa-dev/sdk')).default
       WebApp.ready()
       const initData = WebApp.initData
-      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: {   public_key: walletAddress } })
+      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { public_key: walletAddress } })
 
       toast.dismiss(toastID)
       if (data.ok) {
@@ -64,27 +73,34 @@ const Tasks = ({ user }) => {
         error(data.message)
       }
     } catch (err) {
-      disconnect()
+      // disconnect()
       toast.dismiss(toastID)
       // error('Error while minting. try again.')
       console.error("Error signing message:", err);
+    }
+  }
+  const dailySignIn = async () => {
+    const transaction = {
+      validUntil: Date.now() + 5 * 60 * 1000,
+      messages: [
+        {
+          address:receiving_address,
+          amount: "8000000", // Toncoin in nanotons
+        },
+      ]
+    };
+    try {
+      // Send the transaction using TON Connect
+      const data = await tonConnectUI.sendTransaction(transaction);
+      console.log(data); // Log the transaction data
+    } catch (error) {
+      console.error("Transaction failed:", error); // Handle errors gracefully
     }
   }
 
   return (
     <div>
       <Toaster />
-      <div className='text-white px-4 py-4 mb-4 font-bold text-2xl pb-0 flex justify-between'>
-        <p>Tasks</p>
-        {/* <div className='px-3 py-1.5 cursor-pointer' onClick={connectWallet} style={{
-          backgroundColor: 'black',
-          color: '#9AF6C1',
-          borderRadius: '20px',
-          fontSize: '15px'
-        }} >{!connected && 'Connect wallet'}</div> */}
-        <TonConnectButton></TonConnectButton>
-      </div>
-
       <div className='px-4'>
         {tasks.map((element, index) => (
           <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#2c3235]/30 text-white border border-[#2c3235] relative my-2'>
@@ -121,6 +137,9 @@ const Tasks = ({ user }) => {
             }
           </div>
         ))}
+        <div onClick={dailySignIn}>
+          Send transaction
+        </div>
       </div>
     </div>
   )

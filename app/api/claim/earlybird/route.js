@@ -3,13 +3,26 @@ import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { NextResponse } from "next/server";
 import { session } from "../../auth/session/route";
 import User from "@/models/User";
+import { error } from "@/utils/toast";
+const TonWeb = require("tonweb")
+  
+
 
 
 export async function POST(req) {
     const { data, payload } = await req.json()
     await ConnectMongoDB()
     const { public_key } = payload
-    if (!public_key) {
+    try{
+        if (!public_key) {
+            return NextResponse.json({ ok: false, message: 'Error, refresh and try again.' })
+        }
+        const isValid = TonWeb.utils.Address.isValid(public_key)
+        if(!isValid){
+            throw error('Invalid key')
+        }
+
+    }catch{
         return NextResponse.json({ ok: false, message: 'Error, refresh and try again.' })
     }
 

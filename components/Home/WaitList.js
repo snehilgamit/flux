@@ -1,7 +1,7 @@
 'use client'
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-
+import Header from '../Header'
 const WaitList = ({ user }) => {
   return (
     <div className='min-h-screen flex w-full itmes-center flex-col px-2'>

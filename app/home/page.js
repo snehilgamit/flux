@@ -10,6 +10,7 @@ import Wallet from '@/components/Home/Wallet'
 import "animate.css"
 import LoadingPage from '@/components/LoadingPage'
 import Tasks from '@/components/Home/Tasks'
+import Header from '@/components/Header'
 const home = () => {
     const router = useRouter()
     const [isLogined, setIsLogined] = useState(false)
@@ -18,7 +19,7 @@ const home = () => {
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [currentTab, setCurrentTab] = useState({ current: 0, previous: 0 })
 
-    const components = [<Tasks user={user} />, <WaitList  user={user}/>, <Wallet  user={user}/>]
+    const components = [{component:<Tasks user={user} />,title:'Tasks',header:true}, {component:<WaitList  user={user}/>,title:'Waitlist',header:true}, {component:<Wallet  user={user}/>,header:false}]
     const changeTab = (number) => {
         if (currentTab.current !== number) {
             setCurrentTab(prev => {
@@ -68,8 +69,9 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='flex flex-col h-screen text-black selection:bg-none animate__animated animate__fadeIn overflow-hidden bg-[#191919]'>
-                {components[currentTab.current]}
+            <div className='flex flex-col h-screen text-black selection:bg-none animate__animated animate__fadeIn overflow-hidden bg-[#191919]'> 
+            {components[currentTab.current].header && <Header title={components[currentTab.current].title}/>}
+                {components[currentTab.current].component}
                 {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
                 <Menubar changeTab={changeTab} />
             </div>

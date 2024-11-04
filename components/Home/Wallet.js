@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import { HiEllipsisHorizontal, HiMiniCog6Tooth, HiMiniShare, HiPencil, HiShieldExclamation, HiXMark } from "react-icons/hi2";
+import { useTonWallet } from '@tonconnect/ui-react';
 const months = [
     "January",
     "February",
@@ -21,13 +22,13 @@ const Wallet = ({ user }) => {
     const [editButton, setEditButton] = useState({ profile: false, banner: false })
     const [visible, setVisible] = useState({ refer: false, option: false })
     const [filter, setFilter] = useState({ _catagory: 'collected' })
-    
+
     const changeFilter = (type, value) => {
         if (type === '_catagory') {
             setFilter(prev => {
                 return {
                     ...prev,
-                    _catagory: value 
+                    _catagory: value
                 }
             })
         }
@@ -49,6 +50,7 @@ const Wallet = ({ user }) => {
             }
         })
     }
+    
     return (
         <div className='w-full min-h-screen pb-10 overflow-hidden'>
             <div className='w-full'>
@@ -72,6 +74,9 @@ const Wallet = ({ user }) => {
                             }
                         </div>
                         <div className='flex gap-5 translate-y-1 translate-x-2'>
+                            <div>
+                                {/* {wallet.account.walletState} */}
+                            </div>
                             <div onClick={() => showExtandDetails('refer')}>
                                 <HiMiniShare fill='white' size={25} />
                             </div>
@@ -100,9 +105,9 @@ const Wallet = ({ user }) => {
                     </div>
                 </div>
                 <div className='w-full px-6 h-[20vh] flex justify-center items-center'>
-                <p className='text-white text-xl font-semibold'>
-                    No items to display
-                </p>
+                    <p className='text-white text-xl font-semibold'>
+                        No items to display
+                    </p>
                 </div>
             </div>
             <ExtandDetails visible={visible.refer} close={closeExtandDetails} name={'refer'}>
