@@ -1,3 +1,4 @@
+import Head from "next/head";
 import localFont from "next/font/local";
 import "./globals.css";
 import AppWallerProvider from "@/components/ton/AppWallerProvider";
@@ -8,9 +9,14 @@ const SatoshiVariable = localFont({
   weight: "100 900",
 });
 
-
 export const metadata = {
-  title: 'Flux market'
+  title: 'Flux market',
+}
+export const viewport={
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 export default function RootLayout({ children }) {
   return (
