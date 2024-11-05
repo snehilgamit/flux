@@ -88,7 +88,7 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='flex flex-col h-screen text-black selection:bg-none animate__animated animate__fadeIn overflow-hidden bg-[#191919]'>
+            <div className='flex min-h-screen flex-col w-full bg-[#191919] relative overflow-hidden animate__animated animate__fadeIn'>
                 {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
                 <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                 {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
