@@ -44,7 +44,7 @@ const home = () => {
                     setShowOnboarding(true)
                 }, 1400)
             }
-        }else{
+        } else {
             error(message)
         }
     }
@@ -58,7 +58,7 @@ const home = () => {
                     setShowOnboarding(true)
                 }, 1400)
             }
-        }else{
+        } else {
             error(message)
         }
     }
@@ -73,7 +73,7 @@ const home = () => {
         if (!ok) {
             router.push('/signup')
         } else {
-            await Promise.all([fetchUser(initData),fetchTasks()])
+            await Promise.all([fetchUser(initData), fetchTasks()])
             setIsLogined(true)
         }
     }
@@ -88,12 +88,14 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='flex flex-col overflow-y-auto w-full bg-[#191919] relative overflow-hidden animate__animated animate__fadeIn'>
-                {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
-                <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
-                {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
+            <>
+                <div className='flex flex-col w-full bg-black  overflow-hidden relative h-screen animate__animated animate__fadeIn'>
+                    {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
+                    <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
+                    {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
+                </div>
                 <Menubar changeTab={changeTab} />
-            </div>
+            </>
             :
             <LoadingPage />
         }

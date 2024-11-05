@@ -52,7 +52,7 @@ const Wallet = ({ user, fetchUser ,tasks,fetchTasks}) => {
     }
     
     return (
-        <div className='w-full min-h-screen pb-10 overflow-hidden'>
+        <div className='w-full pb-[10rem] overflow-y-scroll min-h-screen'>
             <div className='w-full'>
                 <div className='w-full h-[110px] bg-white/5'>
                 </div>
