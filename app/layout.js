@@ -9,7 +9,7 @@ const SatoshiVariable = localFont({
 });
 
 export const metadata = {
-  title:'Flux market'
+  title: 'Flux market'
 }
 export default function RootLayout({ children }) {
   return (
@@ -17,9 +17,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${SatoshiVariable.variable} antialiased`}
       >
-      <AppWallerProvider>
+        <AppWallerProvider>
           {children}
-      </AppWallerProvider>
+        </AppWallerProvider>
       </body>
     </html>
   );
