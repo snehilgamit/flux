@@ -1,8 +1,7 @@
 import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { NextResponse } from "next/server";
-import { session } from "../../auth/session/route";
 import User from "@/models/User";
-
+import { session } from "@/app/api/auth/session/route";
 export async function POST(req) {
     const { data } = await req.json()
     await ConnectMongoDB()
@@ -21,12 +20,7 @@ export async function POST(req) {
     const timestamp = temp.getTime()
     const claimed_time = Date.now()
     if (timestamp <= claimed_time) {
-        const updateUser = await User.updateOne({ user_id, 'daily_login.timestamp': { $lte: claimed_time } }, { 'daily_login.timestamp': claimed_time, $inc: { 'daily_login.strike': get_user.daily_login.strike == 7 ? -6 : 1 } })
-        if (!updateUser.modifiedCount) {
-            return NextResponse.json({ ok: false, message: 'You have already fluxed' })
-        }
-        return NextResponse.json({ ok: true, message: 'Fluxed' })
+        return NextResponse.json({ ok: true, message: null })
     }
-    return NextResponse.json({ ok: false, message: 'You can flux tomorrow.' })
+    return NextResponse.json({ ok: false, message: null })
 }
-

@@ -93,7 +93,7 @@ const Tasks = ({ user ,fetchUser , tasks}) => {
   }
 
   return (
-    <div>
+    <div className=' min-h-[80vh] overflow-hidden overflow-y-scroll'>
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
