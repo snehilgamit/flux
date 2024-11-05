@@ -15,6 +15,7 @@ import { error } from '@/utils/toast'
 const home = () => {
     const router = useRouter()
     const [isLogined, setIsLogined] = useState(false)
+    const [height, setHeight] = useState('100vh')
     const fetching = useRef(false)
     const [user, setUser] = useState({})
     const [showOnboarding, setShowOnboarding] = useState(false);
@@ -67,6 +68,7 @@ const home = () => {
         fetching.current = true
         const WebApp = (await import('@twa-dev/sdk')).default
         WebApp.ready()
+        setHeight(WebApp.viewportHeight)
         const initData = WebApp.initData
         const { data } = await axios.post('/api/auth/session', { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
         const { ok, message, referralCode } = data
@@ -88,7 +90,7 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='flex min-h-screen flex-col w-full bg-[#191919] relative overflow-hidden animate__animated animate__fadeIn'>
+            <div style={{height:height ||'100vh'}} className='flex flex-col w-full bg-[#191919] relative overflow-hidden animate__animated animate__fadeIn'>
                 {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
                 <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                 {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}

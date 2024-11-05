@@ -30,15 +30,26 @@ export async function POST(req) {
         if (!get_user) {
             return NextResponse.json({ ok: false, message: 'Invalid user.' })
         }
-        if (!get_user.completed_tasks[uuid]) {
-            const reward = task.reward
-            const updatedUser = await User.updateOne({user_id},{$inc:{flux:reward},'completed_tasks':{...get_user.completed_tasks,[uuid]:true}})
-            if(!updatedUser.modifiedCount){
-                return NextResponse.json({ ok: false, message: 'Try after sometime.'}) 
+        if (get_user.completed_tasks[uuid] === undefined) {
+            let query = 'completed_tasks.'+uuid
+            const updatedUser = await User.updateOne({ user_id }, { [query]: false })
+            if (!updatedUser.modifiedCount) {
+                return NextResponse.json({ ok: false, message: 'Try after sometime.' })
             }
-            return NextResponse.json({ ok: true, message: 'Fluxed.'})
+            return NextResponse.json({ ok: false, message: 'Try again.' })
         }
-        return NextResponse.json({ ok: false, message: 'You have already fluxed.'})
+        if(get_user.completed_tasks[uuid]){
+            return NextResponse.json({ ok: false, message: 'You have already fluxed.' })
+        }
+        else{
+            const reward = task.reward
+            let query = 'completed_tasks.'+uuid
+            const updatedUser = await User.updateOne({user_id},{$inc:{flux:reward},[query]: true})
+            if (!updatedUser.modifiedCount) {
+                return NextResponse.json({ ok: false, message: 'Try after sometime.' })
+            }
+            return NextResponse.json({ ok: true, message: 'Fluxed' })
+        }
     } catch {
         return NextResponse.json({ ok: false, message: 'Error while claiming task.' })
     }
