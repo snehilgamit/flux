@@ -5,7 +5,7 @@ import { HiFire, HiTrophy, HiHome, HiWallet ,HiSquares2X2, HiRocketLaunch} from 
 const Menubar = ({ changeTab }) => {
     const [activeTab, setActiveTab] = useState(0)
     return (
-        <div className='w-full fixed bottom-0 uppercase text-[0.55rem] shadow-xl bg-[#252525]'>
+        <div className='w-full fixed bottom-0 uppercase text-[0.55rem] shadow-xl bg-[#252525] pb-5 translate-y-5'>
             <div className='flex  items-center justify-center gap-20 border-[#2c3235] border-t-2 py-7 pt-1 px-3 pl-5 max-[320px]:px-2 font-semibold border-b-0 border-x-0'>
                 <div className='flex items-center flex-col transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 0 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(0);setActiveTab(0)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===0?'rgb(0 0 0 / 0.05)':'transparent'}}>
