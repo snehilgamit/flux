@@ -95,7 +95,7 @@ const Tasks = ({ user, fetchUser, tasks }) => {
   }
 
   return (
-    <div className='w-full pb-[10rem] overflow-y-scroll'>
+    <div className='w-full pb-[10rem] overflow-y-scroll h-[calc(100%_-_94px)]'>
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
