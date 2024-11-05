@@ -99,7 +99,7 @@ const Tasks = ({ user, fetchUser, tasks }) => {
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
-          <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#191919] text-white relative my-2'>
+          <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[rgba(17 17 17 1)] text-white relative my-2'>
             <div className='flex justify-between'>
               <div>
                 <p className='font-bold text-xl text-white'>
