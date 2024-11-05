@@ -22,5 +22,5 @@ export async function POST(req) {
     if (timestamp <= claimed_time) {
         return NextResponse.json({ ok: true, message: null })
     }
-    return NextResponse.json({ ok: false, message: null })
+    return NextResponse.json({ ok: false, message: 'You can flux tomorrow.' })
 }

@@ -8,6 +8,7 @@ const SatoshiVariable = localFont({
   weight: "100 900",
 });
 
+
 export const metadata = {
   title: 'Flux market'
 }

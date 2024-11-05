@@ -7,14 +7,25 @@ import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 import EventTab from '../Tasks/EventTab'
 import ScrollPage from '../Tasks/ScrollPage'
 import DailyLoginPage from '../Tasks/DailyLoginPage'
-import { dailyLoginData, socialTaskData } from '../Tasks/EventsData'
+import { dailyLoginData } from '../Tasks/EventsData'
 import EventClaimPage from '../Tasks/EventClaimPage'
 const receiving_address = 'UQC1RcKcSZjUfPb5zQKfYzUJ3Q_HRe1c9EEUsDxjCvCpuAlr'
-const Tasks = ({ user ,fetchUser , tasks}) => {
+
+
+export const transaction = {
+  validUntil: Date.now() + 5 * 60 * 1000,
+  messages: [
+    {
+      address: receiving_address,
+      amount: "8000000",
+    },
+  ]
+};
+const Tasks = ({ user, fetchUser, tasks }) => {
   const [tonConnectUI] = useTonConnectUI();
   const walletAddress = useTonAddress()
   const [User, setUser] = useState(user)
-  const [events,setEvents] = useState(user.events)
+  const [events] = useState(user.events)
   const [time, setTime] = useState(null)
   const setTimer = () => {
     const times = user.events.map(el => {
@@ -49,15 +60,6 @@ const Tasks = ({ user ,fetchUser , tasks}) => {
     }
     const toastID = toast.loading('Minting')
     try {
-      const transaction = {
-        validUntil: Date.now() + 5 * 60 * 1000,
-        messages: [
-          {
-            address: receiving_address,
-            amount: "8000000",
-          },
-        ]
-      };
       const tx = await tonConnectUI.sendTransaction(transaction)
       if (window.localStorage.txs) {
         const existingTxs = JSON.parse(window.localStorage.txs)
@@ -69,7 +71,7 @@ const Tasks = ({ user ,fetchUser , tasks}) => {
       const WebApp = (await import('@twa-dev/sdk')).default
       WebApp.ready()
       const initData = WebApp.initData
-      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { public_key: walletAddress,boc:tx } })
+      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { public_key: walletAddress, boc: tx } })
 
       toast.dismiss(toastID)
       if (data.ok) {
@@ -85,11 +87,11 @@ const Tasks = ({ user ,fetchUser , tasks}) => {
       console.error("Error signing message:", err);
     }
   }
-  const claiming = async()=>{
+  const claiming = async () => {
     const WebApp = (await import('@twa-dev/sdk')).default
     WebApp.ready()
     const initData = WebApp.initData
-    const {data} =await axios.get('/api/claim/tasks',{data:initData ? initData:'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1'})
+    const { data } = await axios.get('/api/claim/tasks', { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
   }
 
   return (
@@ -143,7 +145,7 @@ const Tasks = ({ user ,fetchUser , tasks}) => {
 export default Tasks
 
 
-const TasksContent = ({ user, fetchUser ,tasks}) => {
+const TasksContent = ({ user, fetchUser, tasks }) => {
   const components = [DailyLoginPage]
   const [currentPage, setCurrentPage] = useState(0)
   const [visible, setVisible] = useState(false)
@@ -169,7 +171,7 @@ const TasksContent = ({ user, fetchUser ,tasks}) => {
     <div>
       <div className='px-4'>
         <EventTab title={"Daily rewards"} description={"Log in daily to claim increasing rewards and earn up to 127 Flux over 7 days!"} btnTxt={"Flux it."} Func={() => { showEvent(0) }} />
-        <EventClaimPage data={{tasks, fetchUser ,completed_tasks:user.completed_tasks}}/>
+        <EventClaimPage data={{ tasks, fetchUser, completed_tasks: user.completed_tasks }} />
       </div>
       <ScrollPage visible={visible} closeEvent={closeEvent}>
         <CurrentComponents data={data} />

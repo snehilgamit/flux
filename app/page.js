@@ -28,7 +28,6 @@ const index = () => {
     const WebApp = (await import('@twa-dev/sdk')).default
     WebApp.headerColor = '#9AF6C1'
     WebApp.backgroundColor = '#191919'
-    WebApp.expand();
 }
 useEffect(() => {
     if (window) {

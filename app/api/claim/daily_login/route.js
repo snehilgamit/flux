@@ -4,7 +4,8 @@ import { session } from "../../auth/session/route";
 import User from "@/models/User";
 
 export async function POST(req) {
-    const { data } = await req.json()
+    const { data, payload } = await req.json()
+    const { boc } = payload
     await ConnectMongoDB()
     const { ok, user, message } = await session(data)
     if (!ok) {
@@ -21,7 +22,7 @@ export async function POST(req) {
     const timestamp = temp.getTime()
     const claimed_time = Date.now()
     if (timestamp <= claimed_time) {
-        const updateUser = await User.updateOne({ user_id, 'daily_login.timestamp': { $lte: claimed_time } }, { 'daily_login.timestamp': claimed_time, $inc: { 'daily_login.strike': get_user.daily_login.strike == 7 ? -6 : 1 } })
+        const updateUser = await User.updateOne({ user_id, 'daily_login.timestamp': { $lte: claimed_time } }, { 'daily_login.timestamp': claimed_time, $inc: { 'daily_login.strike': get_user.daily_login.strike == 7 ? -6 : 1 },$push:{transaction:{boc,type:'Daily claim'}} })
         if (!updateUser.modifiedCount) {
             return NextResponse.json({ ok: false, message: 'You have already fluxed' })
         }
