@@ -4,12 +4,17 @@ import axios from 'axios'
 import React, { useEffect, useRef, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
+import EventTab from '../Tasks/EventTab'
+import ScrollPage from '../Tasks/ScrollPage'
+import DailyLoginPage from '../Tasks/DailyLoginPage'
+import { dailyLoginData, socialTaskData } from '../Tasks/EventsData'
+import EventClaimPage from '../Tasks/EventClaimPage'
 const receiving_address = 'UQC1RcKcSZjUfPb5zQKfYzUJ3Q_HRe1c9EEUsDxjCvCpuAlr'
-const Tasks = ({ user }) => {
-  const [tonConnectUI, setOptions] = useTonConnectUI();
+const Tasks = ({ user ,fetchUser , tasks}) => {
+  const [tonConnectUI] = useTonConnectUI();
   const walletAddress = useTonAddress()
   const [User, setUser] = useState(user)
-  const [tasks, setTasks] = useState(user.events)
+  const [events,setEvents] = useState(user.events)
   const [time, setTime] = useState(null)
   const setTimer = () => {
     const times = user.events.map(el => {
@@ -45,24 +50,26 @@ const Tasks = ({ user }) => {
     const toastID = toast.loading('Minting')
     try {
       const transaction = {
-      validUntil: Date.now() + 5 * 60 * 1000,
-      messages: [
-        {
-          address:receiving_address,
-          amount: "8000000", // Toncoin in nanotons
-        },
-      ]
-    };
+        validUntil: Date.now() + 5 * 60 * 1000,
+        messages: [
+          {
+            address: receiving_address,
+            amount: "8000000",
+          },
+        ]
+      };
       const tx = await tonConnectUI.sendTransaction(transaction)
-      if(window.localStorage.txs){
-        window.localStorage.txs = JSON.stringify(JSON.parse(window.localStorage.txs) + [tx.boc])
-      }else{
+      if (window.localStorage.txs) {
+        const existingTxs = JSON.parse(window.localStorage.txs)
+        existingTxs.push(tx)
+        window.localStorage.txs = JSON.stringify(existingTxs);
+      } else {
         window.localStorage.txs = JSON.stringify([tx])
       }
       const WebApp = (await import('@twa-dev/sdk')).default
       WebApp.ready()
       const initData = WebApp.initData
-      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { public_key: walletAddress } })
+      const { data } = await axios.post(link, { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1', payload: { public_key: walletAddress,boc:tx } })
 
       toast.dismiss(toastID)
       if (data.ok) {
@@ -78,30 +85,18 @@ const Tasks = ({ user }) => {
       console.error("Error signing message:", err);
     }
   }
-  const dailySignIn = async () => {
-    const transaction = {
-      validUntil: Date.now() + 5 * 60 * 1000,
-      messages: [
-        {
-          address:receiving_address,
-          amount: "8000000", // Toncoin in nanotons
-        },
-      ]
-    };
-    try {
-      // Send the transaction using TON Connect
-      const data = await tonConnectUI.sendTransaction(transaction);
-      console.log(data); // Log the transaction data
-    } catch (error) {
-      console.error("Transaction failed:", error); // Handle errors gracefully
-    }
+  const claiming = async()=>{
+    const WebApp = (await import('@twa-dev/sdk')).default
+    WebApp.ready()
+    const initData = WebApp.initData
+    const {data} =await axios.get('/api/claim/tasks',{data:initData ? initData:'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1'})
   }
 
   return (
     <div>
       <Toaster />
       <div className='px-4'>
-        {tasks.map((element, index) => (
+        {events.map((element, index) => (
           <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#2c3235]/30 text-white border border-[#2c3235] relative my-2'>
             <div className='flex justify-between'>
               <div>
@@ -136,12 +131,49 @@ const Tasks = ({ user }) => {
             }
           </div>
         ))}
-        <div onClick={dailySignIn}>
-          Send transaction
-        </div>
+      </div>
+      <TasksContent user={user} fetchUser={fetchUser} tasks={tasks} />
+      <div className='text-white' onClick={claiming}>
+        claim
       </div>
     </div>
   )
 }
 
 export default Tasks
+
+
+const TasksContent = ({ user, fetchUser ,tasks}) => {
+  const components = [DailyLoginPage]
+  const [currentPage, setCurrentPage] = useState(0)
+  const [visible, setVisible] = useState(false)
+  const [data, setData] = useState({ ...dailyLoginData, claimed: user.daily_login.strike || 0 });
+  const CurrentComponents = components[currentPage]
+
+  const showEvent = (e) => {
+    if (components.length < e) {
+      return;
+    }
+    const allProps = {
+      0: { ...dailyLoginData, claimed: user.daily_login.strike || 0, fetchUser },
+    }
+    setData(allProps[e])
+    setCurrentPage(e)
+    setVisible(prev => !prev)
+  }
+
+  const closeEvent = () => {
+    setVisible(false)
+  }
+  return (
+    <div>
+      <div className='px-4'>
+        <EventTab title={"Daily rewards"} description={"Log in daily to claim increasing rewards and earn up to 127 Flux over 7 days!"} btnTxt={"Flux it."} Func={() => { showEvent(0) }} />
+        <EventClaimPage data={{tasks, fetchUser ,completed_tasks:user.completed_tasks}}/>
+      </div>
+      <ScrollPage visible={visible} closeEvent={closeEvent}>
+        <CurrentComponents data={data} />
+      </ScrollPage>
+    </div >
+  )
+}

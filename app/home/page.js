@@ -11,6 +11,7 @@ import "animate.css"
 import LoadingPage from '@/components/LoadingPage'
 import Tasks from '@/components/Home/Tasks'
 import Header from '@/components/Header'
+import { error } from '@/utils/toast'
 const home = () => {
     const router = useRouter()
     const [isLogined, setIsLogined] = useState(false)
@@ -18,8 +19,10 @@ const home = () => {
     const [user, setUser] = useState({})
     const [showOnboarding, setShowOnboarding] = useState(false);
     const [currentTab, setCurrentTab] = useState({ current: 0, previous: 0 })
+    const [tasksList, setTasksList] = useState([])
 
-    const components = [{component:<Tasks user={user} />,title:'Tasks',header:true}, {component:<WaitList  user={user}/>,title:'Waitlist',header:true}, {component:<Wallet  user={user}/>,header:false}]
+    const components = [{ component: Tasks, title: 'Tasks', header: true }, { component: WaitList, title: 'Waitlist', header: true }, { component: Wallet, header: false }]
+    const CurrentComponent = components[currentTab.current].component
     const changeTab = (number) => {
         if (currentTab.current !== number) {
             setCurrentTab(prev => {
@@ -41,7 +44,22 @@ const home = () => {
                     setShowOnboarding(true)
                 }, 1400)
             }
-            setIsLogined(true)
+        }else{
+            error(message)
+        }
+    }
+    const fetchTasks = async () => {
+        const { data } = await axios.get('/api/claim/tasks')
+        const { ok, message, tasks } = data
+        if (ok) {
+            setTasksList(tasks)
+            if (user.referralOnboarding) {
+                setTimeout(() => {
+                    setShowOnboarding(true)
+                }, 1400)
+            }
+        }else{
+            error(message)
         }
     }
 
@@ -55,7 +73,8 @@ const home = () => {
         if (!ok) {
             router.push('/signup')
         } else {
-            fetchUser(initData)
+            await Promise.all([fetchUser(initData),fetchTasks()])
+            setIsLogined(true)
         }
     }
 
@@ -69,9 +88,9 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='flex flex-col h-screen text-black selection:bg-none animate__animated animate__fadeIn overflow-hidden bg-[#191919]'> 
-            {components[currentTab.current].header && <Header title={components[currentTab.current].title}/>}
-                {components[currentTab.current].component}
+            <div className='flex flex-col h-screen text-black selection:bg-none animate__animated animate__fadeIn overflow-hidden bg-[#191919]'>
+                {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
+                <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                 {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
                 <Menubar changeTab={changeTab} />
             </div>

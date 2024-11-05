@@ -1,8 +1,10 @@
 import Event from "@/models/Event";
+import Task from "@/models/Task";
 import User from "@/models/User";
 import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { isHashValid } from "@/utils/telegramAuth";
 import { NextResponse } from "next/server";
+import { v4 as uuidv4 } from 'uuid'
 export async function POST(req) {
     try {
         await ConnectMongoDB()
@@ -27,7 +29,7 @@ export async function POST(req) {
                 }
                 const events = await Event.find({ isActive: true });
                 const referredBy = await User.findOne({ referralCode: findUser.enteredReferralCode })
-                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events ,early_bird:findUser.early_bird}
+                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events, early_bird: findUser.early_bird, daily_login: findUser.daily_login,completed_tasks:findUser.completed_tasks }
                 if (referredBy) {
                     user.referredBy = { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username }
                 }

@@ -9,16 +9,8 @@ const TaskSchema = new Schema({
         type:String,
         required:true
     },
-    limit:{
-        type:Number,
-        required:true
-    },
-    left:{
-        type:Number,
-        required:true
-    },
     reward:{
-        type:Object,
+        type:Number,
     },
     description:{
         type:String
@@ -31,23 +23,16 @@ const TaskSchema = new Schema({
         type:String,
         default:'users'
     },
-    end:{
-        type:Number,
-        required:true
-    },
     api:{
         type:String,
         required:true
     },
-    start:{
-        type:Number,
+    href:{
+        type:String,
         required:true
-    },
-    tasks:{
-        type:Array,
     }
 })
 
 const Task = models.Task || model('Task',TaskSchema)
 
-export default Event;
+export default Task;

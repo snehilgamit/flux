@@ -18,7 +18,7 @@ const months = [
     "December",
 ];
 const catagory = [{ name: 'Collected', id: 'collected' }, { name: 'Offers', id: 'offers' }, { name: 'Activity', id: 'activity' }, { name: 'Favorite', id: 'favorite' }]
-const Wallet = ({ user }) => {
+const Wallet = ({ user, fetchUser ,tasks,fetchTasks}) => {
     const [editButton, setEditButton] = useState({ profile: false, banner: false })
     const [visible, setVisible] = useState({ refer: false, option: false })
     const [filter, setFilter] = useState({ _catagory: 'collected' })

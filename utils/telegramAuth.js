@@ -1,6 +1,11 @@
 import { webcrypto } from 'crypto'
 export const isHashValid = async (data, botToken) => {
     const encoder = new TextEncoder();
+    // const newTime = Math.floor(Date.now()/1000)
+    // const auth_date = parseInt((data.auth_date))
+    // if(newTime<auth_date){
+    //     return false
+    // }
     const checkString = Object.keys(data)
         .filter((key) => key !== 'hash')
         .map((key) => `${key}=${data[key]}`)

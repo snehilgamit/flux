@@ -6,13 +6,10 @@ import User from "@/models/User";
 import { error } from "@/utils/toast";
 const TonWeb = require("tonweb")
   
-
-
-
 export async function POST(req) {
     const { data, payload } = await req.json()
     await ConnectMongoDB()
-    const { public_key } = payload
+    const { public_key,boc } = payload
     try{
         if (!public_key) {
             return NextResponse.json({ ok: false, message: 'Error, refresh and try again.' })
@@ -53,7 +50,7 @@ export async function POST(req) {
     }
     const update = await User.updateOne({ user_id: user.user_id }, { early_bird: true, 'wallet.public_key': public_key, 'wallet.status': true })
     if (!update.modifiedCount) {
-        await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: 1 } })
+        await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: 1 },$push:{transaction:boc}},)
         return NextResponse.json({ ok: false, message: 'Error while claming.' })
     }
     return NextResponse.json({ ok: true, message: 'Claimed.' })

@@ -2,7 +2,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import Header from '../Header'
-const WaitList = ({ user }) => {
+const WaitList = ({ user, fetchUser ,tasks,fetchTasks}) => {
   return (
     <div className='min-h-screen flex w-full itmes-center flex-col px-2'>
       <div className='text-white text-center mt-8 px-5 mb-4'>
