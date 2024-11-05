@@ -95,11 +95,11 @@ const Tasks = ({ user, fetchUser, tasks }) => {
   }
 
   return (
-    <div className='w-full pb-[10rem] overflow-y-scroll h-[calc(100%_-_94px)]'>
+    <div className='w-full'>
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
-          <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#2c3235]/30 text-white border border-[#2c3235] relative my-2'>
+          <div key={index} className='px-3.5 py-3 rounded-2xl w-full bg-[#191919] text-white relative my-2'>
             <div className='flex justify-between'>
               <div>
                 <p className='font-bold text-xl text-white'>
@@ -135,9 +135,6 @@ const Tasks = ({ user, fetchUser, tasks }) => {
         ))}
       </div>
       <TasksContent user={user} fetchUser={fetchUser} tasks={tasks} />
-      <div className='text-white' onClick={claiming}>
-        claim
-      </div>
     </div>
   )
 }
@@ -168,7 +165,7 @@ const TasksContent = ({ user, fetchUser, tasks }) => {
     setVisible(false)
   }
   return (
-    <div>
+    <div className='overflow-hidden'>
       <div className='px-4'>
         <EventTab title={"Daily rewards"} description={"Log in daily to claim increasing rewards and earn up to 127 Flux over 7 days!"} btnTxt={"Flux it."} Func={() => { showEvent(0) }} />
         <EventClaimPage data={{ tasks, fetchUser, completed_tasks: user.completed_tasks }} />

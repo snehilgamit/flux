@@ -88,14 +88,16 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <>
-                <div className='flex flex-col w-full bg-black  overflow-hidden relative h-screen animate__animated animate__fadeIn'>
-                    {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
-                    <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
-                    {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
+            <div className='overflow-hidden'>
+                <div className=' w-full bg-black  overflow-hidden relative h-screen animate__animated animate__fadeIn'>
+                    <div className='overflow-hidden no-scrollbar w-full h-[calc(100%-6rem)] overflow-y-scroll pb-10'>
+                        {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
+                        <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
+                        {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
+                    </div>
                 </div>
                 <Menubar changeTab={changeTab} />
-            </>
+            </div>
             :
             <LoadingPage />
         }
