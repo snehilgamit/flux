@@ -19,11 +19,7 @@ export async function POST(req) {
         if (findUser) {
             const isValid = await isHashValid(userData, process.env.BOT_TOKEN)
             if (isValid) {
-                const referrals = []
-                const findReferrals = await User.find({ 'enteredReferralCode': findUser.referralCode })
-                findReferrals.forEach((el) => {
-                    referrals.push(el.username)
-                })
+                const referrals = findUser.referrals
                 if (findUser.referralOnboarding == 1) {
                     await User.updateOne({ user_id: id }, { $set: { referralOnboarding: 0 } })
                 }
