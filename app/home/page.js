@@ -101,7 +101,7 @@ const home = () => {
     return (
         <>{isLogined ?
             <>
-                <main className='flex flex-col justify-between h-[calc(100%_-_105px)]'>
+                <main className='flex flex-col justify-between h-[calc(100%_-_94px)]'>
                         <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                         {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
                 </main>

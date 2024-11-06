@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${SatoshiVariable.variable} antialiased h-[calc(100%-105px)]  w-full flex flex-col`}
+        className={`${SatoshiVariable.variable} antialiased  w-full flex flex-col`}
       >
         <AppWalletProvider>
           {children}
