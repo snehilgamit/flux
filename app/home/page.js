@@ -89,7 +89,7 @@ const home = () => {
     return (
         <>{isLogined ?
             <>
-            <div className='w-full bg-black relative min-h-screen'>
+            <div className='w-full bg-black relative min-h-[calc(100vh-96px)]'>
                 hello
             </div>
                 {/* <div className='w-full bg-black overflow-hidden relative h-full animate__animated animate__fadeIn'>
