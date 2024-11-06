@@ -86,6 +86,18 @@ const home = () => {
             checkSession()
         }
     }, [])
+    const changeBg = async () => {
+        const WebApp = (await import('@twa-dev/sdk')).default
+        WebApp.headerColor = '#9AF6C1'
+        WebApp.backgroundColor = '#000000'
+        WebApp.expand()
+      }
+    
+      useEffect(() => {
+        if (window) {
+          changeBg()
+        }
+      }, [])
     return (
         <>{isLogined ?
             <>

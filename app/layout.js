@@ -12,15 +12,18 @@ const SatoshiVariable = localFont({
 export const metadata = {
   title: 'Flux market',
 }
-export const viewport={
-  width: 'device-width',
+export const viewport = {
+  width: "device-width",
   initialScale: 1,
+  minimumScale: 1,
   maximumScale: 1,
-  userScalable: false,
-}
+  viewportFit: "cover",
+  userScalable: "no"
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" style={{'--safe-area-inset-bottom':'0px'}}>
+    <html lang="en">
       <body
         className={`${SatoshiVariable.variable} antialiased h-[calc(100%-105px)]  w-full flex flex-col`}
       >
