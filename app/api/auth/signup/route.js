@@ -4,11 +4,11 @@ import { isHashValid } from "@/utils/telegramAuth";
 import { NextResponse } from "next/server";
 export async function POST(req) {
     try {
-        await  ConnectMongoDB()
+        await ConnectMongoDB()
         const body = await req.json()
         const { data } = body
-        if(!data){
-            return NextResponse.json({ok:false,message:'Hash is not provided.'})
+        if (!data) {
+            return NextResponse.json({ ok: false, message: 'Hash is not provided.' })
         }
         const userData = Object.fromEntries(new URLSearchParams(data));
         const { id, first_name, last_name, username } = JSON.parse(userData.user)
@@ -27,7 +27,12 @@ export async function POST(req) {
                     referralCode,
                     enteredReferralCode
                 }
-                findFriend ? null : newUser.enteredReferralCode = ''
+                if (findFriend) {
+                    const fren = { id, first_name, last_name, username }
+                    await User.updateOne({ user_id: findFriend.user_id }, { $push: { referrals: fren } })
+                } else {
+                    newUser.enteredReferralCode = ''
+                }
                 const createUser = await User.create(newUser)
                 if (createUser) {
                     return NextResponse.json({ ok: true, message: 'Done' })

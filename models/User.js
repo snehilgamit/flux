@@ -6,9 +6,13 @@ const UserSchema = new Schema({
         min: 5,
         max: 14
     },
-    flux:{
-        type:Number,
-        default:0
+    flux: {
+        type: Number,
+        default: 0
+    },
+    referrals: {
+        type: Array,
+        default: []
     },
     first_name: {
         type: String
@@ -25,32 +29,32 @@ const UserSchema = new Schema({
     enteredReferralCode: {
         type: String
     },
-    wallet:{
+    wallet: {
         type: Object,
-        default:{
-            public_key:'',
-            status:false
+        default: {
+            public_key: '',
+            status: false
         }
     },
-    early_bird:{
-        type:Boolean,
-        default:false
+    early_bird: {
+        type: Boolean,
+        default: false
     },
-    transactions:{
-        type:Array,
-        default:[],
+    transactions: {
+        type: Array,
+        default: [],
     }
     ,
-    daily_login:{
-        type:Object,
-        default:{
-            strike:0,
+    daily_login: {
+        type: Object,
+        default: {
+            strike: 0,
             timestemp: Date.now()
         }
     },
-    completed_tasks:{
-        type:Object,
-        default:{}
+    completed_tasks: {
+        type: Object,
+        default: {}
     }
 }, {
     timestamps: true,
