@@ -88,7 +88,7 @@ const home = () => {
     }, [])
     return (
         <>{isLogined ?
-            <div className='overflow-hidden'>
+            <>
                 <div className='w-full bg-black overflow-hidden relative h-[calc(100%-94px)] animate__animated animate__fadeIn'>
                     <div className='overflow-hidden no-scrollbar w-full overflow-y-scroll'>
                         {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
@@ -97,7 +97,7 @@ const home = () => {
                     </div>
                 </div>
                 <Menubar changeTab={changeTab} />
-            </div>
+            </>
             :
             <LoadingPage />
         }
