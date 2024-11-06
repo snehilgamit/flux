@@ -6,7 +6,7 @@ const EventTab = ({ title, description, btnTxt, Func }) => {
           <div className='font-bold '>{title}</div>
           <div className='text-[0.65rem] text-white/70'>{description}</div>
         </div>
-        <div className='text-xs p-2.5 bg-black text-white rounded-3xl font-semibold cursor-pointer border-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={Func} >{btnTxt}</div>
+        <div className='text-xs p-2.5 bg-black text-white rounded-xl font-semibold cursor-pointer border-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={Func} >{btnTxt}</div>
       </div>
     </div>
   )

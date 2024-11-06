@@ -1,6 +1,6 @@
 import Image from "next/image";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { error, success } from "@/utils/toast";
 import { transaction } from "../Home/Tasks";
 import { useTonAddress, useTonConnectUI } from "@tonconnect/ui-react";
@@ -10,8 +10,10 @@ const DailyLoginPage = ({ data }) => {
     const walletAddress = useTonAddress()
     let { claimed, title, reward, description, fetchUser } = data
     const [clickable, setClickable] = useState(true)
+    const loading = useRef(false)
     const [strike, setStrike] = useState(claimed)
     const claim = async () => {
+        loading.current = true
         setClickable(false)
         if(!walletAddress){
             setClickable(true)
@@ -22,7 +24,6 @@ const DailyLoginPage = ({ data }) => {
         const initData = WebApp.initData
         let check = await axios.post('/api/claim/daily_login/check', { data: initData ? initData : 'query_id=AAHaxPIwAgAAANrE8jALLDTQ&user=%7B%22id%22%3A5116183770%2C%22first_name%22%3A%22FAith%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22snoxl%22%2C%22language_code%22%3A%22en%22%2C%22allows_write_to_pm%22%3Atrue%7D&auth_date=1730195778&hash=82b7f5ea47b41a8b54c527745bc6f34e4688c5dc7b61d8c25d431ea8dbaff7e1' })
         if(!check.data.ok){
-            console.log(check.data)
             error(check.data.message)
             setClickable(true)
             return true
@@ -36,6 +37,7 @@ const DailyLoginPage = ({ data }) => {
         } else {
             error(data.message)
         }
+        loading.current = false
         setTimeout(() => {
             setClickable(true)
         }, 1500)
@@ -63,10 +65,10 @@ const DailyLoginPage = ({ data }) => {
                 </div>
                 <>
                     {clickable ?
-                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-black font-semibold rounded-2xl mt-5 max-[300px]:mt-2 cursor-pointer hover:bg-black hover:text-white border-2 border-white duration-300 transition-all" onClick={claim}>
+                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-black font-semibold rounded-xl mt-5 max-[300px]:mt-2 cursor-pointer hover:bg-black hover:text-white border-2 border-white hover:border-[#9AF6C1] duration-300 transition-all" onClick={()=>{loading.current ? claim() : null}}>
                             <div>Claim</div>
                         </div> :
-                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-white font-semibold rounded-2xl mt-5 max-[300px]:mt-2 cursor-pointer border-2 bg-opacity-50 opacity-60 border-white duration-300 transition-all">
+                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-white font-semibold rounded-xl mt-5 max-[300px]:mt-2 cursor-pointer border-2 bg-opacity-50 opacity-60 border-[#9AF6C1] duration-300 transition-all">
                             <div>Claiming...</div>
                         </div>
                     }
