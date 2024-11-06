@@ -1,6 +1,6 @@
 const EventTab = ({ title, description, btnTxt, Func }) => {
   return (
-    <div className='bg-[#191919] border-white/60 text-white rounded-3xl p-4 w-full z-10'>
+    <div className='bg-[#111111] border-white/60 text-white rounded-3xl p-4 w-full z-10'>
       <div className='flex justify-between items-center'>
         <div className='text-start mx-2'>
           <div className='font-bold '>{title}</div>

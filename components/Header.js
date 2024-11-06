@@ -12,7 +12,7 @@ const Header = ({title}) => {
           borderRadius: '20px',
           fontSize: '15px'
         }} >{!connected && 'Connect wallet'}</div> */}
-        <TonConnectButton></TonConnectButton>
+        <TonConnectButton style={{scale:0.8,transform:'translateX(20px)'}}></TonConnectButton>
       </div>
   )
 }
