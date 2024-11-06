@@ -38,13 +38,13 @@ const EventClaimPage = ({ data }) => {
     return (
         <>
             <div className="text-white">
-                <div className="flex flex-col gap-2 mt-5">
+                <div className="flex flex-col gap-2 mt-5 px-4">
                     {tasks.map((el, index) => (
-                        <div key={index} className='  border-[rgba(255,255,255,0.3)] text-white bg-opacity-70 border-b w-full pb-2.5'>
+                        <div key={index} className='  border-[rgba(255,255,255,0.3)] text-white bg-opacity-70 border-b w-full pb-3'>
                             <div className='flex justify-between items-center'>
-                                <div className='text-start mx-2 text-xs'>
+                                <div className='text-start mx-2 text-sm'>
                                     <div className='font-bold'>{el.name}</div>
-                                    <div className='text-[0.6rem] text-white/70 pr-3'>Get {el.reward} $FLUX</div>
+                                    <div className='text-[0.64rem] leading-4 text-white/70 pr-3'>Get {el.reward} $FLUX</div>
                                 </div>
                                 {loading[el.uuid] ? 
                                     <div className='text-xs p-2 border-black text-black rounded-xl font-semibold cursor-pointer bg-[#9AF6C1] border w-fit px-5 text-nowrap'>checking..</div>

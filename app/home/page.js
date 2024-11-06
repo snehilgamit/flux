@@ -11,6 +11,7 @@ import "animate.css"
 import LoadingPage from '@/components/LoadingPage'
 import Tasks from '@/components/Home/Tasks'
 import Header from '@/components/Header'
+import Profile from '@/components/Home/Profile'
 import { error } from '@/utils/toast'
 const home = () => {
     const router = useRouter()
@@ -21,7 +22,7 @@ const home = () => {
     const [currentTab, setCurrentTab] = useState({ current: 0, previous: 0 })
     const [tasksList, setTasksList] = useState([])
 
-    const components = [{ component: Tasks, title: 'Tasks', header: true }, { component: WaitList, title: 'Waitlist', header: true }, { component: Wallet, header: false }]
+    const components = [{ component: Tasks, title: 'Tasks', header: true }, { component: WaitList, title: 'Waitlist', header: true }, { component: Wallet, header: true } , {component:Profile,header:false}]
     const CurrentComponent = components[currentTab.current].component
     const changeTab = (number) => {
         if (currentTab.current !== number) {
@@ -101,7 +102,8 @@ const home = () => {
     return (
         <>{isLogined ?
             <>
-                <main className='flex flex-col justify-between h-[calc(100%_-_94px)]'>
+                <main className='flex flex-col h-[calc(100%_-_94px)]'>
+                {components[currentTab.current].header && <Header title={components[currentTab.current].title}/>}
                         <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                         {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
                 </main>

@@ -96,7 +96,6 @@ const Tasks = ({ user, fetchUser, tasks }) => {
 
   return (
     <div className='flex flex-col flex-1 overflow-auto pb-28'>
-      <Header title={'Tasks'} />
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
