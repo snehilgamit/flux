@@ -3,6 +3,8 @@ import axios from "axios";
 import { useState } from "react";
 import { error, success } from "@/utils/toast";
 import toast from "react-hot-toast";
+import { CgCheck } from "react-icons/cg";
+
 const EventClaimPage = ({ data }) => {
     const { tasks, completed_tasks } = data
     const [loading, setLoading] = useState(Object.keys(completed_tasks).reduce((acc, val) => {
@@ -49,9 +51,11 @@ const EventClaimPage = ({ data }) => {
                                 :
                                 <>
                                 {completed_tasks[el.uuid] ?
-                                    <div className='text-xs p-2 border-white/20 text-white rounded-xl font-semibold cursor-pointer border w-fit px-5 text-nowrap'>Fluxed</div>
+                                    <div className='text-xs p-1 border-[#9AF6C1] rounded-lg font-semibold cursor-pointer border w-fit  text-nowrap'>
+                                        <CgCheck size={24}/>
+                                    </div>
                                     :
-                                    <div className='text-xs p-2 border-black text-black rounded-xl font-semibold cursor-pointer bg-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={() => { checkTask(el.api, el.uuid, el.href) }}>Flux</div>
+                                    <div className='text-xs p-2 border-black text-black rounded-xl font-semibold cursor-pointer bg-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={() => { checkTask(el.api, el.uuid, el.href) }}>Start</div>
                                 }
                                 </>
                                 }

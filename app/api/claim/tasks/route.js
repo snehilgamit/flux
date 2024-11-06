@@ -9,7 +9,8 @@ export async function GET(req) {
         await ConnectMongoDB()
         const tasks = await Task.find({ isActive: true })
         return NextResponse.json({ ok: true, tasks, message: null })
-    } catch {
+    } catch (e) {
+        console.log(e)
         return NextResponse.json({ ok: false, message: 'Error while fetching tasks.' })
     }
 }
@@ -17,6 +18,7 @@ export async function POST(req) {
     try {
         await ConnectMongoDB()
         const { data, uuid } = await req.json()
+        const { pathname } = new URL(req.url)
         const { ok, user, message } = await session(data)
         if (!ok) {
             return NextResponse.json(ok, message)
@@ -24,6 +26,9 @@ export async function POST(req) {
         const user_id = user.user_id
         const get_user = await User.findOne({ user_id })
         const task = await Task.findOne({ uuid })
+        if (task.api !== pathname) {
+            return NextResponse.json({ ok: false, message: 'Something went wrong.' })
+        }
         if (!task) {
             return NextResponse.json({ ok: false, message: 'Something went wrong.' })
         }
@@ -31,20 +36,20 @@ export async function POST(req) {
             return NextResponse.json({ ok: false, message: 'Invalid user.' })
         }
         if (get_user.completed_tasks[uuid] === undefined) {
-            let query = 'completed_tasks.'+uuid
+            let query = 'completed_tasks.' + uuid
             const updatedUser = await User.updateOne({ user_id }, { [query]: false })
             if (!updatedUser.modifiedCount) {
                 return NextResponse.json({ ok: false, message: 'Try after sometime.' })
             }
             return NextResponse.json({ ok: false, message: 'Try again.' })
         }
-        if(get_user.completed_tasks[uuid]){
+        if (get_user.completed_tasks[uuid]) {
             return NextResponse.json({ ok: false, message: 'You have already fluxed.' })
         }
-        else{
+        else {
             const reward = task.reward
-            let query = 'completed_tasks.'+uuid
-            const updatedUser = await User.updateOne({user_id},{$inc:{flux:reward},[query]: true})
+            let query = 'completed_tasks.' + uuid
+            const updatedUser = await User.updateOne({ user_id }, { $inc: { flux: reward }, [query]: true })
             if (!updatedUser.modifiedCount) {
                 return NextResponse.json({ ok: false, message: 'Try after sometime.' })
             }

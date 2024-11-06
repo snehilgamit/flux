@@ -50,7 +50,7 @@ export async function POST(req) {
     }
     const update = await User.updateOne({ user_id: user.user_id }, { early_bird: true, 'wallet.public_key': public_key, 'wallet.status': true })
     if (!update.modifiedCount) {
-        await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: 1 },$push:{transaction:{boc,type:'earlybird claim'}}},)
+        await Event.updateOne({ uuid: 'd8f9ddf1-73ce-481c-a1d8-f938b556047e', start: { $lte: current_timestamp }, end: { $gte: current_timestamp }, left: { $gt: 0 } }, { $inc: { left: 1 },$push:{transactions:{boc,type:'earlybird claim'}}},)
         return NextResponse.json({ ok: false, message: 'Error while claming.' })
     }
     return NextResponse.json({ ok: true, message: 'Claimed.' })

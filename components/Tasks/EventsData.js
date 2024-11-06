@@ -1,4 +1,4 @@
-export const dailyLoginData = { title: 'Daily rewards', description: 'Log in daily to claim increasing rewards and earn up to 127 Flux over 7 days!', reward: '127 FLUX' }
+export const dailyLoginData = { title: 'Daily rewards', description: 'Log in daily to claim increasing rewards and earn up to 127 $FLUX over 7 days!', reward: '127 FLUX' }
 
 export const nftMintData = { title: 'Claim Free NFT', description: 'Reach Level 10 and claim your free NFT instantly!', reward: '1 NFT', claimApi: '/api/game/Missions/nftmint/level10', availableMints: [{ title: "Level 10", description: "Mint special NFT on level 10.", Func: () => { }, btnTxt: "Mint", api: '/', isCompletedBtnTxt: 'Done', 'href': "" }] }
 

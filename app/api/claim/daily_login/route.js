@@ -22,7 +22,7 @@ export async function POST(req) {
     const timestamp = temp.getTime()
     const claimed_time = Date.now()
     if (timestamp <= claimed_time) {
-        const updateUser = await User.updateOne({ user_id, 'daily_login.timestamp': { $lte: claimed_time } }, { 'daily_login.timestamp': claimed_time, $inc: { 'daily_login.strike': get_user.daily_login.strike == 7 ? -6 : 1 },$push:{transaction:{boc,type:'Daily claim'}} })
+        const updateUser = await User.updateOne({ user_id, 'daily_login.timestamp': { $lte: claimed_time } }, { 'daily_login.timestamp': claimed_time, $inc: { 'daily_login.strike': get_user.daily_login.strike == 7 ? -6 : 1 },$push:{transactions:{boc,type:'Daily claim'}} })
         if (!updateUser.modifiedCount) {
             return NextResponse.json({ ok: false, message: 'You have already fluxed' })
         }
