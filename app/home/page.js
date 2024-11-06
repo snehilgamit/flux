@@ -89,13 +89,16 @@ const home = () => {
     return (
         <>{isLogined ?
             <>
-                <div className='w-full bg-black overflow-hidden relative h-full animate__animated animate__fadeIn'>
+            <div className='w-full bg-black relative min-h-screen'>
+                hello
+            </div>
+                {/* <div className='w-full bg-black overflow-hidden relative h-full animate__animated animate__fadeIn'>
                     <div className='overflow-hidden no-scrollbar w-full overflow-y-scroll'>
                         {components[currentTab.current].header && <Header title={components[currentTab.current].title} />}
                         <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
                         {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
                     </div>
-                </div>
+                </div> */}
                 <Menubar changeTab={changeTab} />
             </>
             :
