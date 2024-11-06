@@ -17,6 +17,7 @@ const DailyLoginPage = ({ data }) => {
         setClickable(false)
         if(!walletAddress){
             setClickable(true)
+            loading.current = false
             return error('Connect wallet first')
         }
         const WebApp = (await import('@twa-dev/sdk')).default
@@ -26,6 +27,7 @@ const DailyLoginPage = ({ data }) => {
         if(!check.data.ok){
             error(check.data.message)
             setClickable(true)
+            loading.current = false
             return true
         }
         const boc = await tonConnectUI.sendTransaction(transaction)
