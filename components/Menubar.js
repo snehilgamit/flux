@@ -29,6 +29,7 @@ const Menubar = ({ changeTab }) => {
                 </div>
 
             </div>
+            <div class="flex flex-col items-center px-20 pt-5 pb-2 w-full"></div>
         </main>
     )
 }
