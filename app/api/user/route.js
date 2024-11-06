@@ -20,12 +20,12 @@ export async function POST(req) {
             const isValid = await isHashValid(userData, process.env.BOT_TOKEN)
             if (isValid) {
                 const referrals = findUser.referrals
-                if (findUser.referralOnboarding == 1) {
-                    await User.updateOne({ user_id: id }, { $set: { referralOnboarding: 0 } })
+                if (findUser.referralOnboarding === 1) {
+                    await User.updateOne({ user_id: findUser.user_id }, { $set: { referralOnboarding: 0 } })
                 }
                 const events = await Event.find({ isActive: true });
                 const referredBy = await User.findOne({ referralCode: findUser.enteredReferralCode })
-                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events, early_bird: findUser.early_bird, daily_login: findUser.daily_login,completed_tasks:findUser.completed_tasks }
+                const user = { username: findUser.username, first_name: findUser.first_name, last_name: findUser.last_name, referralCode: findUser.referralCode, referrals, createdAt: findUser.createdAt, events, early_bird: findUser.early_bird, daily_login: findUser.daily_login,completed_tasks:findUser.completed_tasks,referralOnboarding:findUser.referralOnboarding}
                 if (referredBy) {
                     user.referredBy = { first_name: referredBy.first_name, last_name: referredBy.last_name, username: referredBy.username }
                 }

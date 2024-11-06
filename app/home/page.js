@@ -13,6 +13,7 @@ import Tasks from '@/components/Home/Tasks'
 import Header from '@/components/Header'
 import Profile from '@/components/Home/Profile'
 import { error } from '@/utils/toast'
+import ReferredBy from '@/components/ReferredBy'
 const home = () => {
     const router = useRouter()
     const [isLogined, setIsLogined] = useState(false)
@@ -105,7 +106,7 @@ const home = () => {
                 <main className='flex flex-col h-[calc(100%_-_94px)]'>
                 {components[currentTab.current].header && <Header title={components[currentTab.current].title}/>}
                         <CurrentComponent user={user} tasks={tasksList} fetchTasks={fetchTasks} fetchUser={fetchUser} />
-                        {showOnboarding ? <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> : ''}
+                        {showOnboarding && <ReferredBy first_name={user?.referredBy?.first_name} last_name={user?.referredBy?.last_name} username={user?.referredBy?.username} close={close_function} /> }
                 </main>
                 <Menubar changeTab={changeTab} />
             </>

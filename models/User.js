@@ -55,6 +55,9 @@ const UserSchema = new Schema({
     completed_tasks: {
         type: Object,
         default: {}
+    },
+    referralOnboarding: {
+        type: Number
     }
 }, {
     timestamps: true,
