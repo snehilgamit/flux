@@ -166,7 +166,7 @@ const TasksContent = ({ user, fetchUser, tasks }) => {
     setVisible(false)
   }
   return (
-    <div className='overflow-hidden'>
+    <div className='relative'>
       <div className='px-4'>
         <EventTab title={"Daily rewards"} description={"Log in daily to claim increasing rewards and earn up to 127 Flux over 7 days!"} btnTxt={"Flux it."} Func={() => { showEvent(0) }} />
         <EventClaimPage data={{ tasks, fetchUser, completed_tasks: user.completed_tasks }} />
