@@ -13,7 +13,6 @@ html, body, #root {
   overscroll-behavior: none;
 }
 #root {
-  /* Preserve scrolling behavior */
   overflow-y: auto;
 }
 
