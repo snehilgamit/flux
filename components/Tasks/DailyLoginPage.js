@@ -65,7 +65,7 @@ const DailyLoginPage = ({ data }) => {
                 </div>
                 <>
                     {clickable ?
-                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-black font-semibold rounded-xl mt-5 max-[300px]:mt-2 cursor-pointer hover:bg-black hover:text-white border-2 border-white hover:border-[#9AF6C1] duration-300 transition-all" onClick={()=>{loading.current ? claim() : null}}>
+                        <div className="w-full bg-white flex justify-center items-center py-2.5 text-black font-semibold rounded-xl mt-5 max-[300px]:mt-2 cursor-pointer hover:bg-black hover:text-white border-2 border-white hover:border-[#9AF6C1] duration-300 transition-all" onClick={()=>{!loading.current ? claim() : null}}>
                             <div>Claim</div>
                         </div> :
                         <div className="w-full bg-white flex justify-center items-center py-2.5 text-white font-semibold rounded-xl mt-5 max-[300px]:mt-2 cursor-pointer border-2 bg-opacity-50 opacity-60 border-[#9AF6C1] duration-300 transition-all">
