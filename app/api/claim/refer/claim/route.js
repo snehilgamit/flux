@@ -1,8 +1,8 @@
 import Task from "@/models/Task";
 import ConnectMongoDB from "@/utils/ConnectMongoDB";
 import { NextResponse } from "next/server";
-import { session } from "../../auth/session/route";
 import User from "@/models/User";
+import { session } from "@/app/api/auth/session/route";
 
 export async function POST(req) {
     try {
