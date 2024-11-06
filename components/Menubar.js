@@ -5,23 +5,23 @@ import { HiFire, HiTrophy, HiHome, HiWallet ,HiSquares2X2, HiRocketLaunch} from 
 const Menubar = ({ changeTab }) => {
     const [activeTab, setActiveTab] = useState(0)
     return (
-        <main className='flex flex-col mt-0 w-full border-t-1 border-white/20 border-t bg-[#111111] fixed bottom-0 pb-3'>
-            <div className='flex overflow-hidden gap-10 justify-between items-center px-6 pt-3 w-full text-xs leading-snug text-center whitespace-nowrap'>
-                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 0 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(0);setActiveTab(0)}}>
+        <main className='flex flex-col mt-0 w-full border-t-1 border-white/20 border-t bg-[#111111] fixed bottom-0 '>
+            <div className='flex overflow-hidden gap-10 justify-between items-center px-6 pt-3 pb-1 w-full text-xs leading-snug text-center whitespace-nowrap'>
+                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer pb-2' style={{ color: activeTab == 0 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(0);setActiveTab(0)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===0?'rgb(0 0 0 / 0.05)':'transparent'}}>
                         <HiFire className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 0 ? '#9AF6C1' : 'white' }} size={'30px'} />
                     </div>
                     Tasks
                 </div>
                 
-                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 1 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(1);setActiveTab(1)}}>
+                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer pb-2' style={{ color: activeTab == 1 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(1);setActiveTab(1)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ===1?'rgb(0 0 0 / 0.05)':'transparent'}}>
                         <HiRocketLaunch className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 1 ? '#9AF6C1' : 'white' }}  size={'30px'} />
                     </div>
                     Early
                 </div>
 
-                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer' style={{ color: activeTab == 2 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(2);setActiveTab(2)}}>
+                <div className='flex flex-grow justify-start flex-col items-center transition-all duration-500 ease-in-out gap-0.5 cursor-pointer pb-2' style={{ color: activeTab == 2 ? '#9AF6C1' : 'white' }} onClick={() => {changeTab(2);setActiveTab(2)}}>
                     <div className='p-1.5 rounded-lg' style={{backgroundColor:activeTab ==2?'rgb(0 0 0 / 0.05)':'transparent'}}>
                         <HiWallet className='transition-all duration-700 active:scale-125' style={{ fill: activeTab == 2 ? '#9AF6C1' : 'white' }} size={'30px'} />
                     </div>
