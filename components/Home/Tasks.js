@@ -10,7 +10,7 @@ import DailyLoginPage from '../Tasks/DailyLoginPage'
 import { dailyLoginData } from '../Tasks/EventsData'
 import EventClaimPage from '../Tasks/EventClaimPage'
 const receiving_address = 'UQC1RcKcSZjUfPb5zQKfYzUJ3Q_HRe1c9EEUsDxjCvCpuAlr'
-
+import Header from '../Header'
 
 export const transaction = {
   validUntil: Date.now() + 5 * 60 * 1000,
@@ -95,7 +95,8 @@ const Tasks = ({ user, fetchUser, tasks }) => {
   }
 
   return (
-    <div className='flex flex-col flex-1 overflow-auto pb-10'>
+    <div className='flex flex-col flex-1 overflow-auto pb-28'>
+      <Header title={'Tasks'} />
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
