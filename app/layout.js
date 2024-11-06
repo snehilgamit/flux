@@ -20,7 +20,7 @@ export const viewport={
 }
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" style={{'--safe-area-inset-bottom':'0px'}}>
       <body
         className={`${SatoshiVariable.variable} antialiased h-[calc(100%-105px)]  w-full flex flex-col`}
       >
