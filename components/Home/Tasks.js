@@ -95,7 +95,7 @@ const Tasks = ({ user, fetchUser, tasks }) => {
   }
 
   return (
-    <div className='w-full pb-28'>
+    <div className='w-full'>
       <Toaster />
       <div className='px-4'>
         {events.map((element, index) => (
