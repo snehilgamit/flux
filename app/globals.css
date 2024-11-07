@@ -10,6 +10,7 @@ body{
 
 html, body, #root {
   width: 100%;
+  user-select: none;
   height: 100%;
   overflow: hidden;
   overscroll-behavior: none;

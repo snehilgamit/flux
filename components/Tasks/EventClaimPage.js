@@ -1,20 +1,24 @@
 import Image from "next/image";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { error, success } from "@/utils/toast";
 import toast from "react-hot-toast";
 import { CgCheck } from "react-icons/cg";
 
 const EventClaimPage = ({ data }) => {
     const { tasks, completed_tasks } = data
+    const isClickable = useRef(true)
     const [loading, setLoading] = useState(Object.keys(completed_tasks).reduce((acc, val) => {
         acc[val] = false;
         return acc;
     }, {}))
     const checkTask = async (link, uuid, href) => {
+        isClickable.current =false
         setLoading(prev => ({ ...prev, [uuid]: true }))
-        const toastid = toast.loading('checking...')
-        window.open(href)
+        const toastid = href ?toast.loading('checking...'):''
+        if(href){
+            window.open(href)
+        }
         const WebApp = (await import('@twa-dev/sdk')).default
         WebApp.ready()
         const initData = WebApp.initData
@@ -25,15 +29,16 @@ const EventClaimPage = ({ data }) => {
                 toast.dismiss(toastid)
                 setLoading(prev => ({ ...prev, [uuid]: false }))
                 success(data.message)
-            }, 5000)
+            }, href ?5000:0)
         }
         else {
             setTimeout(() => {
                 toast.dismiss(toastid)
                 setLoading(prev => ({ ...prev, [uuid]: false }))
                 error(data.message)
-            }, 5000)
+            }, href ?5000:0)
         }
+        isClickable.current = true
     }
     return (
         <>
@@ -55,7 +60,7 @@ const EventClaimPage = ({ data }) => {
                                         <CgCheck size={24}/>
                                     </div>
                                     :
-                                    <div className='text-xs p-2 border-black text-black rounded-xl font-semibold cursor-pointer bg-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={() => { checkTask(el.api, el.uuid, el.href) }}>Start</div>
+                                    <div className='text-xs p-2 border-black text-black rounded-xl font-semibold cursor-pointer bg-[#9AF6C1] border w-fit px-5 text-nowrap' onClick={() => { isClickable.current ? checkTask(el.api, el.uuid, el.href):null }}>Start</div>
                                 }
                                 </>
                                 }

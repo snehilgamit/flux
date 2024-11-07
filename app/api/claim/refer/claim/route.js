@@ -25,20 +25,13 @@ export async function POST(req) {
         if (!get_user) {
             return NextResponse.json({ ok: false, message: 'Invalid user.' })
         }
-        const findTotalReferral = await User.find({ enteredReferralCode: get_user.referralCode })
-
-
-        if (get_user.completed_tasks[uuid] === undefined) {
-            let query = 'completed_tasks.' + uuid
-            const updatedUser = await User.updateOne({ user_id }, { [query]: false })
-            if (!updatedUser.modifiedCount) {
-                return NextResponse.json({ ok: false, message: 'Try after sometime.' })
-            }
-            return NextResponse.json({ ok: false, message: 'Try again.' })
-        }
         if (get_user.completed_tasks[uuid]) {
             return NextResponse.json({ ok: false, message: 'You have already fluxed.' })
         }
+        if(task.referral_target >= get_user.referrals.length){
+            return NextResponse.json({ok:false,message:`More ${task.referral_target-get_user.referrals.length} refer need to claim.`})
+        }
+        
         else {
             const reward = task.reward
             let query = 'completed_tasks.' + uuid

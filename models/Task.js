@@ -30,6 +30,10 @@ const TaskSchema = new Schema({
     href:{
         type:String,
         required:true
+    },
+    referral_target:{
+        type:Number,
+        default:0
     }
 })
 
