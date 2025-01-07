@@ -14,6 +14,8 @@ export async function GET(req) {
         return NextResponse.json({ ok: false, message: 'Error while fetching tasks.' })
     }
 }
+
+
 export async function POST(req) {
     try {
         await ConnectMongoDB()
@@ -37,8 +39,8 @@ export async function POST(req) {
         }
         if (get_user.completed_tasks[uuid] === undefined) {
             let query = 'completed_tasks.' + uuid
-            const updatedUser = await User.updateOne({ user_id }, { [query]: false })
-            if (!updatedUser.modifiedCount) {
+            const update_user = await User.updateOne({ user_id }, { [query]: false })
+            if (!update_user.modifiedCount) {
                 return NextResponse.json({ ok: false, message: 'Try after sometime.' })
             }
             return NextResponse.json({ ok: false, message: 'Try again.' })
@@ -49,8 +51,8 @@ export async function POST(req) {
         else {
             const reward = task.reward
             let query = 'completed_tasks.' + uuid
-            const updatedUser = await User.updateOne({ user_id }, { $inc: { flux: reward }, [query]: true })
-            if (!updatedUser.modifiedCount) {
+            const update_user = await User.updateOne({ user_id }, { $inc: { flux: reward }, [query]: true })
+            if (!update_user.modifiedCount) {
                 return NextResponse.json({ ok: false, message: 'Try after sometime.' })
             }
             return NextResponse.json({ ok: true, message: 'Fluxed' })

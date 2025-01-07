@@ -7,14 +7,18 @@ export async function POST(req) {
         await ConnectMongoDB()
         const body = await req.json()
         const { data } = body
-        if (!data) {
+        if (!data || data == null) {
             return NextResponse.json({ ok: false, message: 'Hash is not provided.' })
         }
-        const userData = Object.fromEntries(new URLSearchParams(data));
+        
+        const userData = Object.fromEntries(new URLSearchParams(data))  // decode url and convert into JSON object 
+
         const { id, first_name, last_name, username } = JSON.parse(userData.user)
         const findUser = await User.findOne({ user_id: id })
+
         if (!findUser) {
-            const isValid = await isHashValid(userData, process.env.BOT_TOKEN)
+            const isValid = await isHashValid(userData, process.env.BOT_TOKEN)  // check whatever telegram user is valid or not
+
             if (isValid) {
                 const referralCode = userData.hash.slice(0, 14)
                 const enteredReferralCode = userData.start_param
@@ -27,13 +31,16 @@ export async function POST(req) {
                     referralCode,
                     enteredReferralCode
                 }
+                // if referral code exist
                 if (findFriend) {
                     const fren = { id, first_name, last_name, username }
                     await User.updateOne({ user_id: findFriend.user_id }, { $push: { referrals: fren } })
                 } else {
                     newUser.enteredReferralCode = ''
                 }
-                const createUser = await User.create(newUser)
+
+                const createUser = await User.create(newUser)   // adding new user into database.
+                
                 if (createUser) {
                     return NextResponse.json({ ok: true, message: 'Done' })
                 }
@@ -44,7 +51,6 @@ export async function POST(req) {
         return NextResponse.json({ ok: false, message: 'Account exist' })
 
     } catch (e) {
-        console.log(e)
         return NextResponse.json({ ok: false, message: 'Error while creating account' })
     }
 }
